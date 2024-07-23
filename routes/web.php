@@ -4,11 +4,11 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\SaleController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\AuthController;
 
 
-Route::get('/', function () {
-    return view('main');
-})->name('main');
+Route::get('/', [HomeController::class, 'index'])->name('main');
 
 
 // Rutas para productos
@@ -35,3 +35,12 @@ Route::get('/appointments', function () {
 Route::get('/login', function () {
     return view('login');
 })->name('login');
+
+
+
+
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [AuthController::class, 'login']);
+
+Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
+Route::post('/register', [AuthController::class, 'register']);
