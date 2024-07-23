@@ -28,8 +28,23 @@
                 <a class="nav-link" href="{{ route('appointments') }}">Citas Médicas</a>
             </li>
             <li class="nav-item">
-                <a class="btn btn-primary" href="{{ route('login') }}">Iniciar Sesión</a>
+                <a class="nav-link" href="{{ route('carts.index') }}">Carrito de Compras</a>
             </li>
+            @if (Auth::check())
+                <li class="nav-item">
+                    <a class="btn btn-secondary" href="#">{{ Auth::user()->name }}</a>
+                </li>
+                <li class="nav-item">
+                    <form method="POST" action="{{ route('register') }}">
+                        @csrf
+                        <button type="submit" class="btn btn-danger">Cerrar Sesión</button>
+                    </form>
+                </li>
+            @else
+                <li class="nav-item">
+                    <a class="btn btn-primary" href="{{ route('login') }}">Iniciar Sesión</a>
+                </li>
+            @endif
         </ul>
     </div>
 </nav>
@@ -56,7 +71,11 @@
                             <h5 class="card-title">{{ $product->name }}</h5>
                             <p class="card-text">{{ $product->description }}</p>
                             <p class="card-text"><strong>Precio:</strong> ${{ $product->price }}</p>
-                            <a href="{{ route('products.edit', $product->id) }}" class="btn btn-warning">Editar</a>
+                            <form method="POST" action="{{ route('carts.add', $product->id) }}">
+                                @csrf
+                                <input type="hidden" name="quantity" value="1">
+                                <button type="submit" class="btn btn-success">Comprar</button>
+                            </form>
                         </div>
                     </div>
                 </div>
