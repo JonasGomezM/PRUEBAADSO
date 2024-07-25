@@ -1,42 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Products</title>
-    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
-</head>
-<body>
-    <h1>Products</h1>
-    <a href="{{ route('products.create') }}">Add New Product</a>
-    <table>
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Price</th>
-                <th>Stock</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
+@extends('layouts.app') <!-- Cambia esto si el archivo de layout tiene un nombre diferente -->
+
+@section('title', 'Productos')
+
+@section('content')
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Productos</h1>
+        <a href="{{ route('products.create') }}" class="btn btn-primary mb-3">Agregar Nuevo Producto</a>
+
+        <div class="row">
             @foreach($products as $product)
-                <tr>
-                    <td>{{ $product->name }}</td>
-                    <td>{{ $product->description }}</td>
-                    <td>${{ $product->price }}</td>
-                    <td>{{ $product->stock }}</td>
-                    <td>
-                        <a href="{{ route('products.edit', $product->id) }}">Edit</a>
-                        <form action="{{ route('products.destroy', $product->id) }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit">Delete</button>
-                        </form>
-                    </td>
-                </tr>
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                        <img class="card-img-top" src="{{ asset('images/product-placeholder.png') }}" alt="Imagen del Producto">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ $product->name }}</h5>
+                            <p class="card-text">{{ $product->description }}</p>
+                            <p class="card-text"><strong>Precio:</strong> ${{ $product->price }}</p>
+                            <p class="card-text"><strong>Stock:</strong> {{ $product->stock }}</p>
+                            
+                            <div class="d-flex justify-content-between">
+                                <a href="{{ route('products.edit', $product->id) }}" class="btn btn-warning">Editar</a>
+                                <form action="{{ route('products.destroy', $product->id) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                                </form>
+                                <form action="#" method="POST">
+                                    @csrf
+                                    <button type="submit" class="btn btn-info">Oferta</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             @endforeach
-        </tbody>
-    </table>
-</body>
-</html>
+        </div>
+    </div>
+@endsection

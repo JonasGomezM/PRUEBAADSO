@@ -17,6 +17,12 @@
     <div class="login-container">
         <h2 class="text-center">Iniciar Sesión</h2>
 
+        @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+
         @if ($errors->any())
             <div class="alert alert-danger">
                 <ul>
@@ -31,7 +37,7 @@
             @csrf
             <div class="form-group">
                 <label for="email">Correo Electrónico</label>
-                <input type="email" class="form-control" id="email" name="email" required autofocus>
+                <input type="email" class="form-control" id="email" name="email" required>
             </div>
             <div class="form-group">
                 <label for="password">Contraseña</label>
@@ -39,6 +45,7 @@
             </div>
             <button type="submit" class="btn btn-primary btn-block">Iniciar Sesión</button>
         </form>
+
         <div class="text-center mt-3">
             <a href="{{ route('register') }}">¿No tienes cuenta? Regístrate</a>
         </div>
