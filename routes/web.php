@@ -8,12 +8,12 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Auth;
 
-
 // Ruta para la página principal
 Route::get('/', [HomeController::class, 'index'])->name('main');
 
 // Rutas para productos
 Route::resource('products', ProductController::class);
+Route::post('/products/{id}/offer', [ProductController::class, 'offer'])->name('products.offer');
 
 // Rutas para carritos
 Route::middleware('auth')->group(function () {
@@ -43,5 +43,5 @@ Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('regi
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('logout', function () { Auth::logout(); return redirect('/');})->name('logout');
 
-//obtener las ofertas
-Route::get('/offers', [ProductController::class, 'offer'])->name('offers.index');
+// Obtener las ofertas
+Route::get('/offers', [ProductController::class, 'showOffers'])->name('offers.index');

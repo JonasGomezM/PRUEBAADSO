@@ -8,6 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class OfferProduct extends Model
 {
     use HasFactory;
-    protected $fillable = ['name', 'description', 'price', 'stock'];
-    // Si necesitas agregar propiedades o métodos específicos, hazlo aquí
+
+    protected $fillable = ['product_id', 'name', 'description', 'price', 'stock'];
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
 }

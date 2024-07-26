@@ -1,4 +1,4 @@
-@extends('layouts.app') <!-- Cambia esto si el archivo de layout tiene un nombre diferente -->
+@extends('layouts.app')
 
 @section('title', 'Productos')
 
@@ -25,10 +25,11 @@
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger">Eliminar</button>
                                 </form>
-                                <form action="#" method="POST">
+                                <form action="{{ route('products.offer', $product->id) }}" method="POST">
                                     @csrf
                                     <button type="submit" class="btn btn-info">Oferta</button>
                                 </form>
+                                
                             </div>
                         </div>
                     </div>

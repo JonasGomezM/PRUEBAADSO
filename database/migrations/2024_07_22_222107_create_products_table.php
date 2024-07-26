@@ -11,11 +11,13 @@ class CreateProductsTable extends Migration
     Schema::create('products', function (Blueprint $table) {
         $table->id();
         $table->string('name');
-        $table->text('description')->nullable();
-        $table->decimal('price', 10, 2); // Ajusta el tamaño y la precisión según lo necesites
+        $table->text('description');
+        $table->decimal('price', 8, 2);
         $table->integer('stock');
+        $table->boolean('is_on_offer')->default(false); // Nueva columna
         $table->timestamps();
     });
+    
 }
 
 

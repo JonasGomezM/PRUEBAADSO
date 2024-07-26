@@ -3,18 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use Illuminate\Http\Request;
 use App\Models\OfferProduct;
+use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
+    // ProductController.php
     public function index()
     {
-        // Obtén todos los productos y productos en oferta
         $products = Product::all();
-        $offerProducts = OfferProduct::all();
+        $offerProducts = Product::where('is_on_offer', true)->get(); // Asegúrate de tener una columna 'is_on_offer' en tu modelo Product
 
-        // Devuelve la vista específica para productos
         return view('products.index', compact('products', 'offerProducts'));
     }
 
@@ -47,17 +46,17 @@ class ProductController extends Controller
     }
 
     public function update(Request $request, Product $product)
-{
-    $request->validate([
-        'name' => 'required|string|max:255',
-        'description' => 'nullable|string',
-        'price' => 'required|numeric',
-        'stock' => 'required|integer',
-    ]);
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'price' => 'required|numeric',
+            'stock' => 'required|integer',
+        ]);
 
-    $product->update($request->all());
-    return redirect()->route('products.index')->with('success', 'Producto actualizado.');
-}
+        $product->update($request->all());
+        return redirect()->route('products.index')->with('success', 'Producto actualizado.');
+    }
 
     public function destroy(Product $product)
     {
@@ -65,13 +64,25 @@ class ProductController extends Controller
         return redirect()->route('products.index');
     }
 
-
-    public function offer()
+    public function offer(Request $request, $id)
     {
-        // Recupera todos los productos en oferta desde el modelo OfferProduct
-        $offerProducts = OfferProduct::all();
+        $product = Product::findOrFail($id);
 
-        // Devuelve la vista 'offers.index' con los productos en oferta
-        return view('offers.index', compact('offerProducts'));
+        // Crear el producto en oferta si no existe
+        if (!$product->offerProduct) {
+            OfferProduct::create([
+                'product_id' => $product->id,
+                'name' => $product->name,
+                'description' => $product->description,
+                'price' => $product->price,
+                'stock' => $product->stock,
+            ]);
+
+            // Actualizar la columna is_on_offer en el modelo Product
+            $product->is_on_offer = true;
+            $product->save();
+        }
+
+        return redirect()->route('products.index')->with('success', 'Producto agregado a la oferta.');
     }
 }
