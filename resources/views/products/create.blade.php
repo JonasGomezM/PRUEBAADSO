@@ -1,4 +1,4 @@
-@extends('layouts.app') <!-- Cambia esto si el archivo de layout tiene un nombre diferente -->
+@extends('layouts.app')
 
 @section('title', 'Agregar Producto')
 
@@ -34,6 +34,18 @@
                         <label for="stock">Stock</label>
                         <input type="number" id="stock" name="stock" class="form-control" required>
                         @error('stock')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="form-group">
+                        <label for="category">Categoría</label>
+                        <select id="category" name="category" class="form-control" required>
+                            <option value="">Seleccionar categoría</option>
+                            <option value="perros">Perros</option>
+                            <option value="gatos">Gatos</option>
+                            <option value="ropa">Ropa</option>
+                        </select>
+                        @error('category')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>

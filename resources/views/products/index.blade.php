@@ -37,7 +37,9 @@
                                 </form>
                                 <form action="{{ route('products.offer', $product->id) }}" method="POST">
                                     @csrf
-                                    <button type="submit" class="btn btn-info">Oferta</button>
+                                    <button type="submit" class="btn {{ $product->is_on_offer ? 'btn-danger' : 'btn-info' }}">
+                                        {{ $product->is_on_offer ? 'Desactivar Oferta' : 'Activar Oferta' }}
+                                    </button>
                                 </form>
                                 
                             </div>
