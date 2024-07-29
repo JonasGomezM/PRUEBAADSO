@@ -36,7 +36,7 @@ class CartController extends Controller
             ['quantity' => $request->quantity]
         );
 
-        return redirect()->route('carts.index');
+        return redirect()->back()->with('success', 'Producto agregado al carrito exitosamente.');
     }
 
     public function remove($itemId)
