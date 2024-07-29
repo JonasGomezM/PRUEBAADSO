@@ -18,7 +18,7 @@ class ProductController extends Controller
             return $queryBuilder->where('name', 'like', "%{$query}%");
         })->get();
 
-        $offerProducts = Product::where('is_on_offer', true)->get(); 
+        $offerProducts = Product::where('is_on_offer', true)->get();
 
         return view('products.index', compact('products', 'offerProducts'));
     }
@@ -74,36 +74,42 @@ class ProductController extends Controller
     }
 
     public function offer(Request $request, $id)
-{
-    $product = Product::findOrFail($id);
+    {
+        $product = Product::findOrFail($id);
 
-    if ($product->is_on_offer) {
-        // Si el producto ya está en oferta, quítalo de la oferta
-        $product->is_on_offer = false;
-        $product->save();
+        if ($product->is_on_offer) {
+            // Si el producto ya está en oferta, quítalo de la oferta
+            $product->is_on_offer = false;
+            $product->save();
 
-        // Elimina el producto de la tabla OfferProduct si existe
-        $offerProduct = $product->offerProduct;
-        if ($offerProduct) {
-            $offerProduct->delete();
+            // Elimina el producto de la tabla OfferProduct si existe
+            $offerProduct = $product->offerProduct;
+            if ($offerProduct) {
+                $offerProduct->delete();
+            }
+
+            return redirect()->route('products.index')->with('success', 'Oferta desactivada.');
+        } else {
+            // Si el producto no está en oferta, agrégalo a la oferta
+            OfferProduct::create([
+                'product_id' => $product->id,
+                'name' => $product->name,
+                'description' => $product->description,
+                'price' => $product->price,
+                'stock' => $product->stock,
+            ]);
+
+            $product->is_on_offer = true;
+            $product->save();
+
+            return redirect()->route('products.index')->with('success', 'Producto agregado a la oferta.');
         }
-
-        return redirect()->route('products.index')->with('success', 'Oferta desactivada.');
-    } else {
-        // Si el producto no está en oferta, agrégalo a la oferta
-        OfferProduct::create([
-            'product_id' => $product->id,
-            'name' => $product->name,
-            'description' => $product->description,
-            'price' => $product->price,
-            'stock' => $product->stock,
-        ]);
-
-        $product->is_on_offer = true;
-        $product->save();
-
-        return redirect()->route('products.index')->with('success', 'Producto agregado a la oferta.');
     }
-}
 
+    public function showOffers()
+    {
+        $offerProducts = Product::where('is_on_offer', true)->get();
+
+        return view('offers.index', compact('offerProducts'));
+    }
 }

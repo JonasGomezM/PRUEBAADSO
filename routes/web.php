@@ -23,6 +23,7 @@ Route::get('/', [HomeController::class, 'index'])->name('main');
 // Rutas para productos
 Route::resource('products', ProductController::class);
 Route::post('/products/{id}/offer', [ProductController::class, 'offer'])->name('products.offer');
+Route::get('/offers', [ProductController::class, 'offers'])->name('offers.index');
 
 // Rutas para carritos
 Route::middleware('auth')->group(function () {
