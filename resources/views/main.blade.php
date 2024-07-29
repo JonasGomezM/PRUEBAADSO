@@ -3,14 +3,14 @@
 @section('title', 'Página Principal')
 
 @section('content')
-    <div class="container">
-        <!-- Inputs de Búsqueda -->
-        <div class="row mb-4">
-            <div class="col-md-12">
-                <input type="text" class="form-control" placeholder="Buscar productos por nombre...">
-            </div>
+    <div class="container-fluid px-0">
+        <!-- Mensaje de Bienvenida -->
+        <div class="text-center my-4">
+            <h1 class="display-3 font-weight-bold">Bienvenido a la Página Principal</h1>
+            <p class="lead text-muted">Explora nuestros productos y ofertas.</p>
         </div>
-        <!-- Carrusel de las Imágenes -->
+
+        <!-- Carrusel de Imágenes -->
         <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
             <ol class="carousel-indicators">
                 <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
@@ -29,73 +29,79 @@
                 </div>
             </div>
             <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true" style="filter: invert(1);"></span>
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                 <span class="sr-only">Anterior</span>
             </a>
             <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true" style="filter: invert(1);"></span>
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 <span class="sr-only">Siguiente</span>
             </a>
         </div>
-        <h1 class="text-center">Bienvenido a la Página Principal</h1>
-        <p class="text-center">Explora nuestros productos y ofertas.</p>
+
+        <!-- Inputs de Búsqueda -->
+        <div class="row my-4">
+            <div class="col-md-12">
+                <input type="text" class="form-control form-control-lg shadow-sm" placeholder="Buscar productos por nombre...">
+            </div>
+        </div>
 
         <div class="row">
             <!-- Sección de Categorías -->
-            <div class="col-md-3">
-                <h4>Categorías</h4>
-                <ul class="list-group">
-                    <li class="list-group-item">Categoría 1</li>
-                    <li class="list-group-item">Categoría 2</li>
-                    <li class="list-group-item">Categoría 3</li>
+            <div class="col-md-3 mb-4">
+                <h4 class="font-weight-bold mb-3">Categorías</h4>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Perros</li>
+                    <li class="list-group-item">Gatos</li>
+                    <li class="list-group-item">Ropa</li>
                 </ul>
             </div>
 
             <!-- Sección Principal -->
             <div class="col-md-9">
-
                 <!-- Mostrar Productos en Oferta Solo Si Existen -->
                 @if($offerProducts->count())
                     <div class="mt-5">
-                        <h2>Productos en Oferta</h2>
-                        <div class="position-relative">
-                            <div id="offerProductsCarousel" class="carousel slide" data-ride="carousel">
-                                <div class="carousel-inner">
-                                    @foreach($offerProducts->chunk(3) as $chunk)
-                                        <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
-                                            <div class="row">
-                                                @foreach($chunk as $product)
-                                                    <div class="col-md-4 mb-3">
-                                                        <div class="card">
-                                                            @if($product->image_url)
-                                                                <img class="card-img-top" src="{{ $product->image_url }}" alt="Imagen del Producto" style="height: 150px; object-fit: cover;">
-                                                            @else
-                                                                <img class="card-img-top" src="{{ asset('images/product-placeholder.png') }}" alt="Imagen del Producto">
-                                                            @endif
-                                                            <div class="card-body">
-                                                                <h5 class="card-title">{{ $product->name }}</h5>
-                                                                <p class="card-text">{{ $product->description }}</p>
-                                                                <p class="card-text"><strong>Precio:</strong> ${{ $product->price }}</p>
+                        <h2 class="font-weight-bold mb-4">Productos en Oferta</h2>
+                        <div id="offerProductsCarousel" class="carousel slide" data-ride="carousel">
+                            <div class="carousel-inner">
+                                @foreach($offerProducts->chunk(3) as $chunk)
+                                    <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
+                                        <div class="row">
+                                            @foreach($chunk as $product)
+                                                <div class="col-md-4 mb-4">
+                                                    <div class="card border-light shadow-sm">
+                                                        @if($product->image_url)
+                                                            <img class="card-img-top" src="{{ $product->image_url }}" alt="Imagen del Producto" style="height: 150px; object-fit: cover;">
+                                                        @else
+                                                            <img class="card-img-top" src="{{ asset('images/product-placeholder.png') }}" alt="Imagen del Producto">
+                                                        @endif
+                                                        <div class="card-body">
+                                                            <h5 class="card-title">{{ $product->name }}</h5>
+                                                            <p class="card-text">{{ $product->description }}</p>
+                                                            <div class="d-flex justify-content-between align-items-center">
+                                                                <p class="card-text mb-0"><strong>Precio:</strong> ${{ $product->price }}</p>
                                                                 <form method="POST" action="{{ route('carts.add', $product->id) }}">
                                                                     @csrf
                                                                     <input type="hidden" name="quantity" value="1">
-                                                                    <button type="submit" class="btn btn-primary">Agregar al Carrito</button>
+                                                                    <button type="submit" class="btn btn-primary">
+                                                                        <i class="fas fa-shopping-cart"></i>
+                                                                    </button>
                                                                 </form>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                @endforeach
-                                            </div>
+                                                </div>
+                                            @endforeach
                                         </div>
-                                    @endforeach
-                                </div>
+                                    </div>
+                                @endforeach
                             </div>
                             <a class="carousel-control-prev" href="#offerProductsCarousel" role="button" data-slide="prev">
-                                <span class="carousel-control-prev-icon" aria-hidden="true" style="filter: invert(1);"></span>
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                                 <span class="sr-only">Anterior</span>
                             </a>
                             <a class="carousel-control-next" href="#offerProductsCarousel" role="button" data-slide="next">
-                                <span class="carousel-control-next-icon" aria-hidden="true" style="filter: invert(1);"></span>
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                 <span class="sr-only">Siguiente</span>
                             </a>
                             <!-- Botón para ver más ofertas -->
@@ -108,11 +114,11 @@
 
                 <!-- Mostrar Productos Recientes -->
                 <div class="mt-5">
-                    <h2>Productos Recientes</h2>
+                    <h2 class="font-weight-bold mb-4">Productos Recientes</h2>
                     <div class="row">
                         @foreach($products as $product)
-                            <div class="col-md-4 mb-3">
-                                <div class="card">
+                            <div class="col-md-4 mb-4">
+                                <div class="card border-light shadow-sm">
                                     @if($product->image_url)
                                         <img class="card-img-top" src="{{ $product->image_url }}" alt="Imagen del Producto" style="height: 150px; object-fit: cover;">
                                     @else
@@ -121,12 +127,16 @@
                                     <div class="card-body">
                                         <h5 class="card-title">{{ $product->name }}</h5>
                                         <p class="card-text">{{ $product->description }}</p>
-                                        <p class="card-text"><strong>Precio:</strong> ${{ $product->price }}</p>
-                                        <form method="POST" action="{{ route('carts.add', $product->id) }}">
-                                            @csrf
-                                            <input type="hidden" name="quantity" value="1">
-                                            <button type="submit" class="btn btn-success">Agregar al Carrito</button>
-                                        </form>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <p class="card-text mb-0"><strong>Precio:</strong> ${{ $product->price }}</p>
+                                            <form method="POST" action="{{ route('carts.add', $product->id) }}">
+                                                @csrf
+                                                <input type="hidden" name="quantity" value="1">
+                                                <button type="submit" class="btn btn-success">
+                                                    <i class="fas fa-shopping-cart"></i>
+                                                </button>
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -138,6 +148,20 @@
     </div>
 
     <style>
+        /* Estilos del Carrusel */
+        .carousel {
+            width: 100vw;
+            max-width: 100%;
+            height: 60vh;
+            overflow: hidden;
+        }
+
+        .carousel-inner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
         .carousel-control-prev,
         .carousel-control-next {
             width: 5%;
@@ -146,31 +170,72 @@
         }
 
         .carousel-control-prev {
-            left: -5%;
+            left: 0;
         }
 
         .carousel-control-next {
-            right: -5%;
-        }
-
-        .carousel-inner {
-            padding: 0 5%;
+            right: 0;
         }
 
         .carousel-control-prev-icon,
         .carousel-control-next-icon {
             background-color: transparent;
+            border: none;
         }
 
         .carousel-control-prev-icon::after,
         .carousel-control-next-icon::after {
-            content: '‹';
             font-size: 2rem;
-            color: black;
+            color: #333;
         }
 
-        .carousel-control-next-icon::after {
-            content: '›';
+        /* Estilos de las Tarjetas */
+        .card {
+            border: none;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .card-img-top {
+            border-bottom: 1px solid #ddd;
+        }
+
+        .card-body {
+            padding: 1rem;
+        }
+
+        /* Estilos de los Botones */
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            border: none;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
+
+        .btn-info {
+            background-color: #17a2b8;
+            border: none;
+        }
+
+        .btn-info:hover {
+            background-color: #117a8b;
         }
     </style>
 @endsection

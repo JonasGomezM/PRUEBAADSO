@@ -9,52 +9,46 @@
             @csrf
             <div class="row">
                 <div class="col-md-8 offset-md-2">
-                    <!-- Campos existentes -->
+                    <!-- Campos existentes con placeholder en lugar de labels -->
                     <div class="form-group">
-                        <label for="name">Nombre</label>
-                        <input type="text" id="name" name="name" class="form-control" required>
+                        <input type="text" id="name" name="name" class="form-control @error('name') is-invalid @enderror" placeholder="Nombre del Producto" value="{{ old('name') }}" required>
                         @error('name')
-                            <div class="text-danger">{{ $message }}</div>
+                            <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="form-group">
-                        <label for="description">Descripción</label>
-                        <textarea id="description" name="description" class="form-control"></textarea>
+                        <textarea id="description" name="description" class="form-control @error('description') is-invalid @enderror" placeholder="Descripción">{{ old('description') }}</textarea>
                         @error('description')
-                            <div class="text-danger">{{ $message }}</div>
+                            <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="form-group">
-                        <label for="price">Precio</label>
-                        <input type="number" id="price" name="price" class="form-control" step="0.01" required>
+                        <input type="number" id="price" name="price" class="form-control @error('price') is-invalid @enderror" placeholder="Precio" step="0.01" value="{{ old('price') }}" required>
                         @error('price')
-                            <div class="text-danger">{{ $message }}</div>
+                            <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="form-group">
-                        <label for="stock">Stock</label>
-                        <input type="number" id="stock" name="stock" class="form-control" required>
+                        <input type="number" id="stock" name="stock" class="form-control @error('stock') is-invalid @enderror" placeholder="Stock" value="{{ old('stock') }}" required>
                         @error('stock')
-                            <div class="text-danger">{{ $message }}</div>
+                            <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="form-group">
-                        <label for="category">Categoría</label>
-                        <select id="category" name="category" class="form-control" required>
+                        <select id="category" name="category" class="form-control @error('category') is-invalid @enderror" required>
                             <option value="">Seleccionar categoría</option>
-                            <option value="perros">Perros</option>
-                            <option value="gatos">Gatos</option>
-                            <option value="ropa">Ropa</option>
+                            <option value="perros" {{ old('category') == 'perros' ? 'selected' : '' }}>Perros</option>
+                            <option value="gatos" {{ old('category') == 'gatos' ? 'selected' : '' }}>Gatos</option>
+                            <option value="ropa" {{ old('category') == 'ropa' ? 'selected' : '' }}>Ropa</option>
                         </select>
                         @error('category')
-                            <div class="text-danger">{{ $message }}</div>
+                            <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="form-group">
-                        <label for="image_url">URL de la Imagen</label>
-                        <input type="text" id="image_url" name="image_url" class="form-control">
+                        <input type="text" id="image_url" name="image_url" class="form-control @error('image_url') is-invalid @enderror" placeholder="URL de la Imagen" value="{{ old('image_url') }}">
                         @error('image_url')
-                            <div class="text-danger">{{ $message }}</div>
+                            <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="d-flex justify-content-between">
@@ -66,3 +60,48 @@
         </form>
     </div>
 @endsection
+
+<!-- Estilos personalizados -->
+<style>
+    .container {
+        max-width: 1200px; /* Asegura que el contenedor no se expanda demasiado */
+    }
+
+    h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+    }
+
+    .form-control {
+        border-radius: 0.25rem;
+        box-shadow: none;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border: none;
+        border-radius: 0.25rem;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border: none;
+        border-radius: 0.25rem;
+    }
+
+    .btn-secondary:hover {
+        background-color: #5a6268;
+    }
+
+    .invalid-feedback {
+        font-size: 0.875rem;
+    }
+</style>

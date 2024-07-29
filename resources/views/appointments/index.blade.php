@@ -4,60 +4,62 @@
 
 @section('content')
 <div class="container mt-5">
-    <h2 class="mb-4">Lista de Citas Médicas</h2>
+    <h2 class="mb-4 text-center">Lista de Citas Médicas</h2>
     
     @if($appointments->isEmpty())
-        <p>No hay citas registradas.</p>
+        <p class="text-center">No hay citas registradas.</p>
     @else
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Nombre de la Mascota</th>
-                    <th>Fecha</th>
-                    <th>Hora</th>
-                    <th>Veterinario</th>
-                    <th>Estado</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($appointments as $appointment)
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <thead class="thead-dark">
                     <tr>
-                        <td>{{ $appointment->pet_name }}</td>
-                        <td>{{ $appointment->appointment_date }}</td>
-                        <td>{{ $appointment->appointment_time }}</td>
-                        <td>{{ $appointment->vet }}</td>
-                        <td>
-                            <span class="badge {{ $appointment->status == 'accepted' ? 'badge-success' : 'badge-danger' }}">
-                                {{ $appointment->status == 'accepted' ? 'Aceptada' : 'Rechazada' }}
-                            </span>
-                        </td>
-                        <td class="text-center">
-                            <div class="btn-group" role="group" aria-label="Acciones">
-                                <!-- Botón de aceptar -->
-                                <form action="{{ route('appointments.updateStatus', $appointment) }}" method="POST" style="display:inline;">
-                                    @csrf
-                                    @method('PATCH')
-                                    <input type="hidden" name="status" value="accepted">
-                                    <button type="submit" class="btn btn-success btn-sm">Aceptar</button>
-                                </form>
-                                <!-- Botón de rechazar -->
-                                <form action="{{ route('appointments.updateStatus', $appointment) }}" method="POST" style="display:inline;">
-                                    @csrf
-                                    @method('PATCH')
-                                    <input type="hidden" name="status" value="rejected">
-                                    <button type="submit" class="btn btn-danger btn-sm">Rechazar</button>
-                                </form>
-                                <!-- Icono de ojo para ver las notas -->
-                                <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#notesModal{{ $appointment->id }}">
-                                    <i class="fas fa-eye"></i>
-                                </button>
-                            </div>
-                        </td>
+                        <th>Nombre de la Mascota</th>
+                        <th>Fecha</th>
+                        <th>Hora</th>
+                        <th>Veterinario</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach($appointments as $appointment)
+                        <tr>
+                            <td>{{ $appointment->pet_name }}</td>
+                            <td>{{ $appointment->appointment_date }}</td>
+                            <td>{{ $appointment->appointment_time }}</td>
+                            <td>{{ $appointment->vet }}</td>
+                            <td>
+                                <span class="badge {{ $appointment->status == 'accepted' ? 'badge-success' : 'badge-danger' }}">
+                                    {{ $appointment->status == 'accepted' ? 'Aceptada' : 'Rechazada' }}
+                                </span>
+                            </td>
+                            <td class="text-center">
+                                <div class="btn-group" role="group" aria-label="Acciones">
+                                    <!-- Botón de aceptar -->
+                                    <form action="{{ route('appointments.updateStatus', $appointment) }}" method="POST" style="display:inline;">
+                                        @csrf
+                                        @method('PATCH')
+                                        <input type="hidden" name="status" value="accepted">
+                                        <button type="submit" class="btn btn-success btn-sm">Aceptar</button>
+                                    </form>
+                                    <!-- Botón de rechazar -->
+                                    <form action="{{ route('appointments.updateStatus', $appointment) }}" method="POST" style="display:inline;">
+                                        @csrf
+                                        @method('PATCH')
+                                        <input type="hidden" name="status" value="rejected">
+                                        <button type="submit" class="btn btn-danger btn-sm">Rechazar</button>
+                                    </form>
+                                    <!-- Icono de ojo para ver las notas -->
+                                    <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#notesModal{{ $appointment->id }}">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
     @endif
 </div>
 
@@ -65,7 +67,7 @@
 @foreach($appointments as $appointment)
     <!-- Modal -->
     <div class="modal fade" id="notesModal{{ $appointment->id }}" tabindex="-1" role="dialog" aria-labelledby="notesModalLabel{{ $appointment->id }}" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="notesModalLabel{{ $appointment->id }}">Notas de la Cita</h5>
@@ -84,3 +86,47 @@
     </div>
 @endforeach
 @endsection
+
+<!-- Estilos personalizados -->
+<style>
+    .container {
+        max-width: 1200px; /* Asegura que el contenedor no se expanda demasiado */
+    }
+
+    h2 {
+        font-size: 2rem;
+        font-weight: 700;
+    }
+
+    .table {
+        margin-top: 20px;
+    }
+
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: #f9f9f9;
+    }
+
+    .thead-dark th {
+        background-color: #343a40;
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .badge-success {
+        background-color: #28a745;
+    }
+
+    .badge-danger {
+        background-color: #dc3545;
+    }
+
+    .btn-info i {
+        margin-right: 5px;
+    }
+
+    .modal-dialog-centered {
+        display: flex;
+        align-items: center;
+        min-height: calc(100% - 1rem);
+    }
+</style>

@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-light">
     <a class="navbar-brand" href="{{ route('main') }}">
         <img src="{{ asset('images/logo.png') }}" alt="Logo" style="height: 40px;">
     </a>
@@ -11,7 +11,7 @@
                 <a class="nav-link" href="{{ route('products.index') }}">Productos</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('offers.index') }}">ofertas</a>
+                <a class="nav-link" href="{{ route('offers.index') }}">Ofertas</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('appointments.create') }}">Citas Médicas</a>
@@ -42,3 +42,72 @@
         </ul>
     </div>
 </nav>
+
+<style>
+    .navbar {
+        background-color: #ffffff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar-brand img {
+        height: 40px;
+    }
+
+    .navbar-nav .nav-link {
+        color: #333333;
+        font-weight: bold;
+        transition: color 0.3s ease;
+    }
+
+    .navbar-nav .nav-link:hover {
+        color: #6A0DAD;
+    }
+
+    .navbar-toggler {
+        border: none;
+    }
+
+    .navbar-toggler-icon {
+        background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M4 6h16M4 12h16M4 18h16'/%3E%3C/svg%3E");
+    }
+
+    .btn-secondary {
+        background-color: #6A0DAD;
+        border-color: #6A0DAD;
+        color: #ffffff;
+        transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    .btn-secondary:hover {
+        background-color: #8A2BE2;
+        border-color: #8A2BE2;
+    }
+
+    .btn-primary {
+        background-color: #6A0DAD;
+        border-color: #6A0DAD;
+        color: #ffffff;
+        transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background-color: #8A2BE2;
+        border-color: #8A2BE2;
+    }
+
+    .btn-danger {
+        background-color: #d9534f;
+        border-color: #d9534f;
+        color: #ffffff;
+        transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    .btn-danger:hover {
+        background-color: #c9302c;
+        border-color: #c9302c;
+    }
+
+    .badge-danger {
+        background-color: #d9534f;
+    }
+</style>
