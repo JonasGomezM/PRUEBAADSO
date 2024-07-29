@@ -7,6 +7,14 @@ use App\Http\Controllers\SaleController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Auth;
+use App\Exports\ProductsExport;
+use Maatwebsite\Excel\Facades\Excel;
+
+// Ruta para la exportación a Excel
+Route::get('/products/export', function () {
+    return Excel::download(new ProductsExport, 'productos.xlsx');
+})->name('products.export');
+
 
 // Ruta para la página principal
 Route::get('/', [HomeController::class, 'index'])->name('main');
@@ -45,3 +53,8 @@ Route::post('logout', function () { Auth::logout(); return redirect('/');})->nam
 
 // Obtener las ofertas
 Route::get('/offers', [ProductController::class, 'showOffers'])->name('offers.index');
+
+//citas medicas
+Route::get('/citas_medicas', function () {
+    return view('citas_medicas');
+})->name('citas_medicas.index');

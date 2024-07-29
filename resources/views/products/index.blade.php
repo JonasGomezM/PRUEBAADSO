@@ -6,6 +6,7 @@
     <div class="container mt-5">
         <h1 class="text-center mb-4">Productos</h1>
 
+        
         <!-- Formulario de Búsqueda (sin funcionalidad aún) -->
         <form action="#" method="GET" class="mb-4">
             <div class="input-group">
@@ -13,8 +14,12 @@
                 <button class="btn btn-primary" type="submit">Buscar</button>
             </div>
         </form>
-
+        
         <a href="{{ route('products.create') }}" class="btn btn-primary mb-3">Agregar Nuevo Producto</a>
+        <!-- Botón de Descargar Excel -->
+        <a href="{{ route('products.export') }}" class="btn btn-success mb-3">
+        <i class="fas fa-download"></i> Descargar
+        </a>
 
         <div class="row">
             @foreach($products as $product)

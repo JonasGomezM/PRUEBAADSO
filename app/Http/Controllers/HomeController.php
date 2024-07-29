@@ -18,3 +18,44 @@ class HomeController extends Controller
         return view('main', compact('products', 'offerProducts'));
     }
 }
+
+
+
+
+// este controlador es de muetsra para visualizar el contador de prodcutos solo en esta vista
+// para verlos en todas las rutas hay que hacer un controlador provider para visualizar todo
+// namespace App\Http\Controllers;
+
+// use App\Models\Product;
+// use App\Models\Cart;
+// use Illuminate\Support\Facades\Auth;
+
+// class HomeController extends Controller
+// {
+//     public function index()
+//     {
+//         // Obtener todos los productos
+//         $products = Product::all();
+        
+//         // Obtener productos en oferta
+//         $offerProducts = Product::where('is_on_offer', true)->get();
+
+//         // Obtener el conteo de productos en el carrito
+//         $cartProductsCount = $this->getCartProductsCount();
+
+//         // Pasar todos los datos a la vista principal
+//         return view('main', compact('products', 'offerProducts', 'cartProductsCount'));
+//     }
+
+//     private function getCartProductsCount()
+//     {
+//         // Si el usuario está autenticado, obtener el carrito y contar los productos
+//         if (Auth::check()) {
+//             $cart = Cart::where('user_id', Auth::id())->first();
+//             return $cart ? $cart->items->sum('quantity') : 0;
+//         }
+
+//         return 0; // Si no está autenticado, el conteo es 0
+//     }
+// }
+
