@@ -8,11 +8,10 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    // ProductController.php
     public function index()
     {
         $products = Product::all();
-        $offerProducts = Product::where('is_on_offer', true)->get(); // Asegúrate de tener una columna 'is_on_offer' en tu modelo Product
+        $offerProducts = Product::where('is_on_offer', true)->get(); 
 
         return view('products.index', compact('products', 'offerProducts'));
     }
@@ -29,6 +28,7 @@ class ProductController extends Controller
             'description' => 'nullable|string',
             'price' => 'required|numeric',
             'stock' => 'required|integer',
+            'category' => 'required|string|in:perros,gatos,ropa', // Validación para la categoría
         ]);
 
         Product::create($request->all());
@@ -52,6 +52,7 @@ class ProductController extends Controller
             'description' => 'nullable|string',
             'price' => 'required|numeric',
             'stock' => 'required|integer',
+            'category' => 'required|string|in:perros,gatos,ropa', // Validación para la categoría
         ]);
 
         $product->update($request->all());
@@ -68,7 +69,6 @@ class ProductController extends Controller
     {
         $product = Product::findOrFail($id);
 
-        // Crear el producto en oferta si no existe
         if (!$product->offerProduct) {
             OfferProduct::create([
                 'product_id' => $product->id,
@@ -78,7 +78,6 @@ class ProductController extends Controller
                 'stock' => $product->stock,
             ]);
 
-            // Actualizar la columna is_on_offer en el modelo Product
             $product->is_on_offer = true;
             $product->save();
         }

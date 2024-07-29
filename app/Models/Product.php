@@ -9,9 +9,8 @@ class Product extends Model
 {
     use HasFactory;
 
-    // Product.php
-    protected $fillable = ['name', 'description', 'price', 'stock', 'is_on_offer'];
-
+    // Agrega 'category' al array $fillable
+    protected $fillable = ['name', 'description', 'price', 'stock', 'is_on_offer', 'category'];
 
     public function offerProduct()
     {

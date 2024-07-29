@@ -36,6 +36,20 @@
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
+
+            <!-- Campo de categoría con opciones predefinidas -->
+            <div class="form-group">
+                <label for="category">Categoría</label>
+                <select id="category" name="category" class="form-control">
+                    <option value="perros" {{ old('category', $product->category) == 'perros' ? 'selected' : '' }}>Perros</option>
+                    <option value="gatos" {{ old('category', $product->category) == 'gatos' ? 'selected' : '' }}>Gatos</option>
+                    <option value="ropa" {{ old('category', $product->category) == 'ropa' ? 'selected' : '' }}>Ropa</option>
+                </select>
+                @error('category')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
+
             <button type="submit" class="btn btn-primary">Actualizar Producto</button>
             <a href="{{ route('products.index') }}" class="btn btn-secondary">Cancelar</a>
         </form>
