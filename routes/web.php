@@ -9,6 +9,7 @@ use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Auth;
 use App\Exports\ProductsExport;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Http\Controllers\AppointmentController;
 
 // Ruta para la exportación a Excel
 Route::get('/products/export', function () {
@@ -34,15 +35,6 @@ Route::middleware('auth')->group(function () {
 Route::get('sales', [SaleController::class, 'index'])->name('sales.index');
 Route::post('sales/store', [SaleController::class, 'store'])->name('sales.store');
 
-// Rutas para otras páginas
-Route::get('/contacts', function () {
-    return view('contacts');
-})->name('contacts');
-
-Route::get('/appointments', function () {
-    return view('appointments');
-})->name('appointments');
-
 // Rutas para autenticación
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
@@ -55,6 +47,17 @@ Route::post('logout', function () { Auth::logout(); return redirect('/');})->nam
 Route::get('/offers', [ProductController::class, 'showOffers'])->name('offers.index');
 
 //citas medicas
-Route::get('/citas_medicas', function () {
-    return view('citas_medicas');
-})->name('citas_medicas.index');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/appointments/create', [AppointmentController::class, 'create'])->name('appointments.create');
+Route::post('/appointments', [AppointmentController::class, 'store'])->name('appointments.store');
+Route::get('/appointments', [AppointmentController::class, 'index'])->name('appointments.index');
+Route::patch('/appointments/{appointment}', [AppointmentController::class, 'updateStatus'])->name('appointments.updateStatus');
+});
+
+
+
+
+// Rutas para otras páginas
+Route::get('/contacts', function () {
+    return view('contacts');
+})->name('contacts');

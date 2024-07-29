@@ -1,9 +1,5 @@
-<!-- Barra de Navegación -->
-
-
-<!-- Barra de Navegación de prueba para el contador de carro -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="{{ route('main') }}"> <!-- Redirige a la página principal -->
+    <a class="navbar-brand" href="{{ route('main') }}">
         <img src="{{ asset('images/logo.png') }}" alt="Logo" style="height: 40px;">
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,7 +14,7 @@
                 <a class="nav-link" href="{{ route('contacts') }}">Contactos</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('appointments') }}">Citas Médicas</a>
+                <a class="nav-link" href="{{ route('appointments.create') }}">Citas Médicas</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('carts.index') }}">
@@ -46,4 +42,3 @@
         </ul>
     </div>
 </nav>
-
