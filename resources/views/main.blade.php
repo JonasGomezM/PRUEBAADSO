@@ -4,13 +4,13 @@
 
 @section('content')
     <div class="container">
-        <!-- Input de Búsqueda -->
+        <!-- Inputs de Búsqueda -->
         <div class="row mb-4">
             <div class="col-md-12">
                 <input type="text" class="form-control" placeholder="Buscar productos por nombre...">
             </div>
         </div>
-        <!-- Carrusel de Imágenes -->
+        <!-- Carrusel de las Imágenes -->
         <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
                     <ol class="carousel-indicators">
                         <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>

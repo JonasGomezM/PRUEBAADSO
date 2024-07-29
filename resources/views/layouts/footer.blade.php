@@ -19,7 +19,7 @@
                     <li><a href="{{ route('main') }}" class="text-white">Inicio</a></li>
                     <li><a href="{{ route('products.index') }}" class="text-white">Productos</a></li>
                     <li><a href="{{ route('offers.index') }}" class="text-white">Ofertas</a></li>
-                    <li><a class="text-white">Contacto</a></li>
+                    <li><a class="text-white">Contactos</a></li>
                 </ul>
             </div>
             
