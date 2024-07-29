@@ -51,13 +51,34 @@
                     </tr>
                 </tfoot>
             </table>
-            <!-- Botón para proceder a la compra (sin lógica asociada) -->
-            <a href="#" class="btn btn-primary mt-3">Comprar</a>
+            <!-- Botón para proceder a la compra -->
+            <button id="buy-button" class="btn btn-primary mt-3">Comprar</button>
         @else
             <div class="alert alert-info" role="alert">
                 Tu carrito está vacío.
             </div>
         @endif
+    </div>
+
+    <!-- Modal de Compra Exitosa -->
+    <div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="successModalLabel">Compra Exitosa</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body text-center">
+                    <i class="fas fa-check-circle fa-4x text-success"></i>
+                    <p class="mt-3">¡Tu compra se realizó con éxito!</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- JavaScript -->
@@ -83,6 +104,44 @@
 
             // Inicializa el total
             updateTotal();
+
+            // Maneja el clic en el botón Comprar
+            document.getElementById('buy-button').addEventListener('click', function() {
+                const items = Array.from(document.querySelectorAll('#cart-items tr')).map(row => {
+                    return {
+                        id: row.getAttribute('data-id'),
+                        quantity: parseInt(row.querySelector('.quantity-input').value)
+                    };
+                });
+
+                const total = parseFloat(document.getElementById('total').textContent.replace('$', ''));
+
+                fetch('/sale', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({
+                        items: items,
+                        total: total,
+                        user_id: {{ Auth::id() }}
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Mostrar el modal en lugar de la alerta
+                    $('#successModal').modal('show');
+                    // Recargar la página después de cerrar el modal
+                    $('#successModal').on('hidden.bs.modal', function () {
+                        location.reload();
+                    });
+                })
+                .catch(error => {
+                    alert('Error al procesar la compra.');
+                    console.error('Error:', error);
+                });
+            });
         });
     </script>
 @endsection

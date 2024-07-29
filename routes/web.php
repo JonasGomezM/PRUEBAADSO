@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Exports\ProductsExport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\SalesController;
 
 // Ruta para la exportación a Excel
 Route::get('/products/export', function () {
@@ -56,9 +57,9 @@ Route::patch('/appointments/{appointment}', [AppointmentController::class, 'upda
 });
 
 
+// Ruta para mostrar las ventas
+Route::get('/sales', [SaleController::class, 'index'])->name('sales.index');
 
+// Ruta para almacenar una nueva venta
+Route::post('/sale', [SaleController::class, 'ajaxStore'])->name('sales.ajaxStore');
 
-// Rutas para otras páginas
-Route::get('/contacts', function () {
-    return view('contacts');
-})->name('contacts');

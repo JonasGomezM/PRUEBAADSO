@@ -14,8 +14,15 @@ class Sale extends Model
         'total',
     ];
 
+    // Relación con el modelo SaleItem
     public function items()
     {
         return $this->hasMany(SaleItem::class);
+    }
+
+    // Relación con el modelo User
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }
