@@ -36,7 +36,6 @@
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
-
             <!-- Campo de categoría con opciones predefinidas -->
             <div class="form-group">
                 <label for="category">Categoría</label>
@@ -46,6 +45,15 @@
                     <option value="ropa" {{ old('category', $product->category) == 'ropa' ? 'selected' : '' }}>Ropa</option>
                 </select>
                 @error('category')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <!-- Campo para URL de la imagen -->
+            <div class="form-group">
+                <label for="image_url">URL de la Imagen</label>
+                <input type="text" id="image_url" name="image_url" class="form-control" value="{{ old('image_url', $product->image_url) }}">
+                @error('image_url')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>

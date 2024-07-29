@@ -36,12 +36,14 @@ class ProductController extends Controller
             'description' => 'nullable|string',
             'price' => 'required|numeric',
             'stock' => 'required|integer',
-            'category' => 'required|string|in:perros,gatos,ropa', // Validación para la categoría
+            'category' => 'required|string|in:perros,gatos,ropa',
+            'image_url' => 'nullable|url', // Validación para la URL de la imagen
         ]);
 
         Product::create($request->all());
         return redirect()->route('products.index');
     }
+
 
     public function show(Product $product)
     {

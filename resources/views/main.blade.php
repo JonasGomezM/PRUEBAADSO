@@ -1,4 +1,4 @@
-@extends('layouts.app') <!-- Cambia esto si el archivo de layout tiene un nombre diferente -->
+@extends('layouts.app')
 
 @section('title', 'Página Principal')
 
@@ -12,31 +12,31 @@
         </div>
         <!-- Carrusel de las Imágenes -->
         <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-                    <ol class="carousel-indicators">
-                        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-                        <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-                        <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-                    </ol>
-                    <div class="carousel-inner">
-                        <div class="carousel-item active">
-                            <img class="d-block w-100" src="{{ asset('images/slide1.jpg') }}" alt="Primera diapositiva">
-                        </div>
-                        <div class="carousel-item">
-                            <img class="d-block w-100" src="{{ asset('images/slide2.jpg') }}" alt="Segunda diapositiva">
-                        </div>
-                        <div class="carousel-item">
-                            <img class="d-block w-100" src="{{ asset('images/slide3.jpg') }}" alt="Tercera diapositiva">
-                        </div>
-                    </div>
-                    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true" style="filter: invert(1);"></span>
-                        <span class="sr-only">Anterior</span>
-                    </a>
-                    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true" style="filter: invert(1);"></span>
-                        <span class="sr-only">Siguiente</span>
-                    </a>
+            <ol class="carousel-indicators">
+                <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+            </ol>
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img class="d-block w-100" src="{{ asset('images/slide1.jpg') }}" alt="Primera diapositiva">
                 </div>
+                <div class="carousel-item">
+                    <img class="d-block w-100" src="{{ asset('images/slide2.jpg') }}" alt="Segunda diapositiva">
+                </div>
+                <div class="carousel-item">
+                    <img class="d-block w-100" src="{{ asset('images/slide3.jpg') }}" alt="Tercera diapositiva">
+                </div>
+            </div>
+            <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true" style="filter: invert(1);"></span>
+                <span class="sr-only">Anterior</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true" style="filter: invert(1);"></span>
+                <span class="sr-only">Siguiente</span>
+            </a>
+        </div>
         <h1 class="text-center">Bienvenido a la Página Principal</h1>
         <p class="text-center">Explora nuestros productos y ofertas.</p>
 
@@ -67,7 +67,11 @@
                                                 @foreach($chunk as $product)
                                                     <div class="col-md-4 mb-3">
                                                         <div class="card">
-                                                            <img class="card-img-top" src="{{ asset('images/product-placeholder.png') }}" alt="Imagen del Producto">
+                                                            @if($product->image_url)
+                                                                <img class="card-img-top" src="{{ $product->image_url }}" alt="Imagen del Producto" style="height: 150px; object-fit: cover;">
+                                                            @else
+                                                                <img class="card-img-top" src="{{ asset('images/product-placeholder.png') }}" alt="Imagen del Producto">
+                                                            @endif
                                                             <div class="card-body">
                                                                 <h5 class="card-title">{{ $product->name }}</h5>
                                                                 <p class="card-text">{{ $product->description }}</p>
@@ -94,6 +98,10 @@
                                 <span class="carousel-control-next-icon" aria-hidden="true" style="filter: invert(1);"></span>
                                 <span class="sr-only">Siguiente</span>
                             </a>
+                            <!-- Botón para ver más ofertas -->
+                            <div class="text-center mt-3">
+                                <a href="{{ route('offers.index') }}" class="btn btn-info">Ver Más Ofertas</a>
+                            </div>
                         </div>
                     </div>
                 @endif
@@ -105,7 +113,11 @@
                         @foreach($products as $product)
                             <div class="col-md-4 mb-3">
                                 <div class="card">
-                                    <img class="card-img-top" src="{{ asset('images/product-placeholder.png') }}" alt="Imagen del Producto">
+                                    @if($product->image_url)
+                                        <img class="card-img-top" src="{{ $product->image_url }}" alt="Imagen del Producto" style="height: 150px; object-fit: cover;">
+                                    @else
+                                        <img class="card-img-top" src="{{ asset('images/product-placeholder.png') }}" alt="Imagen del Producto">
+                                    @endif
                                     <div class="card-body">
                                         <h5 class="card-title">{{ $product->name }}</h5>
                                         <p class="card-text">{{ $product->description }}</p>

@@ -9,6 +9,7 @@
             @csrf
             <div class="row">
                 <div class="col-md-8 offset-md-2">
+                    <!-- Campos existentes -->
                     <div class="form-group">
                         <label for="name">Nombre</label>
                         <input type="text" id="name" name="name" class="form-control" required>
@@ -46,6 +47,13 @@
                             <option value="ropa">Ropa</option>
                         </select>
                         @error('category')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="form-group">
+                        <label for="image_url">URL de la Imagen</label>
+                        <input type="text" id="image_url" name="image_url" class="form-control">
+                        @error('image_url')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>

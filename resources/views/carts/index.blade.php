@@ -23,7 +23,7 @@
                             <tr data-id="{{ $item->id }}" data-price="{{ $item->product->price }}">
                                 <td>
                                     <!-- Imagen del producto -->
-                                    <img src="{{ asset('storage/' . $item->product->image) }}" alt="{{ $item->product->name }}" class="img-thumbnail" style="width: 100px; height: auto;">
+                                    <img src="{{ $item->product->image_url }}" alt="{{ $item->product->name }}" class="img-thumbnail" style="width: 100px; height: auto;">
                                 </td>
                                 <td>{{ $item->product->name }}</td>
                                 <td>

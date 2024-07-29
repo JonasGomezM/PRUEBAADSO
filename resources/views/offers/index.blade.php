@@ -14,7 +14,12 @@
             @foreach($offerProducts as $product)
                 <div class="col-md-4 mb-3">
                     <div class="card">
-                        <img class="card-img-top" src="{{ asset('images/product-placeholder.png') }}" alt="Imagen del Producto">
+                        <!-- Mostrar la imagen del producto si está disponible, de lo contrario usar una imagen predeterminada -->
+                        @if($product->image_url)
+                            <img class="card-img-top" src="{{ $product->image_url }}" alt="Imagen del Producto">
+                        @else
+                            <img class="card-img-top" src="{{ asset('images/product-placeholder.png') }}" alt="Imagen del Producto">
+                        @endif
                         <div class="card-body">
                             <h5 class="card-title">{{ $product->name }}</h5>
                             <p class="card-text">{{ $product->description }}</p>

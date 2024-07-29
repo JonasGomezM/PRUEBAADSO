@@ -44,7 +44,7 @@
     /* Agrega este estilo en tu archivo CSS (app.css) */
 
 html, body {
-    height: 140%;
+    height: 150%;
     margin: 0;
 }
 
