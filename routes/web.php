@@ -27,11 +27,9 @@ Route::post('/products/{id}/offer', [ProductController::class, 'offer'])->name('
 Route::get('/offers', [ProductController::class, 'offers'])->name('offers.index');
 
 // Rutas para carritos
-Route::middleware('auth')->group(function () {
-    Route::get('/cart', [CartController::class, 'index'])->name('carts.index');
-    Route::post('/cart/add/{productId}', [CartController::class, 'add'])->name('carts.add');
-    Route::delete('/cart/remove/{itemId}', [CartController::class, 'remove'])->name('carts.remove'); 
-});
+Route::get('cart', [CartController::class, 'index'])->name('carts.index');
+Route::post('cart/add/{productId}', [CartController::class, 'add'])->name('carts.add');
+Route::delete('cart/remove/{itemId}', [CartController::class, 'remove'])->name('carts.remove');
 
 // Rutas para ventas
 Route::get('sales', [SaleController::class, 'index'])->name('sales.index');
@@ -51,9 +49,9 @@ Route::get('/offers', [ProductController::class, 'showOffers'])->name('offers.in
 //citas medicas
 Route::middleware(['auth'])->group(function () {
     Route::get('/appointments/create', [AppointmentController::class, 'create'])->name('appointments.create');
-Route::post('/appointments', [AppointmentController::class, 'store'])->name('appointments.store');
-Route::get('/appointments', [AppointmentController::class, 'index'])->name('appointments.index');
-Route::patch('/appointments/{appointment}', [AppointmentController::class, 'updateStatus'])->name('appointments.updateStatus');
+    Route::patch('/appointments/{appointment}', [AppointmentController::class, 'updateStatus'])->name('appointments.updateStatus');
+    Route::get('/appointments', [AppointmentController::class, 'index'])->name('appointments.index');
+    Route::post('/appointments', [AppointmentController::class, 'store'])->name('appointments.store');
 });
 
 
@@ -63,3 +61,38 @@ Route::get('/sales', [SaleController::class, 'index'])->name('sales.index');
 // Ruta para almacenar una nueva venta
 Route::post('/sale', [SaleController::class, 'ajaxStore'])->name('sales.ajaxStore');
 
+
+
+
+
+use App\Http\Controllers\Admin\InventarioController;
+use App\Http\Controllers\Admin\FacturasController;
+use App\Http\Controllers\Admin\CitasController;
+use App\Http\Controllers\Admin\RegistroUsuarioController;
+
+// Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
+//     Route::get('/admin', function () {
+//         return view('admin.index');
+//     })->name('admin.index');
+
+//     Route::get('/inventario', [InventarioController::class, 'index'])->name('admin.inventario');
+//     Route::get('/facturas', [FacturasController::class, 'index'])->name('admin.facturas');
+//     Route::get('/citas', [CitasController::class, 'index'])->name('admin.citas');
+//     Route::get('/registro-usuario', [RegistroUsuarioController::class, 'index'])->name('admin.registro_usuario');
+// });
+
+    // Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
+//     Route::get('/inventario', [InventarioController::class, 'index'])->name('admin.inventario');
+//     Route::get('/facturas', [FacturasController::class, 'index'])->name('admin.facturas');
+//     Route::get('/citas', [CitasController::class, 'index'])->name('admin.citas');
+//     Route::get('/registro-usuario', [RegistroUsuarioController::class, 'index'])->name('admin.registro_usuario');
+// });
+
+Route::get('/admin', function () {
+        return view('admin.index');
+    })->name('admin.index');
+
+    Route::get('/inventario', [InventarioController::class, 'index'])->name('admin.inventario');
+    Route::get('/facturas', [FacturasController::class, 'index'])->name('admin.facturas');
+    Route::get('/citas', [citasController::class, 'index'])->name('admin.citas');
+    Route::get('/registro-usuario', [RegistroUsuarioController::class, 'index'])->name('admin.registro_usuario');
