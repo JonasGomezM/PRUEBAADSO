@@ -10,7 +10,8 @@ class CitasController extends Controller
 {
     public function index()
     {
-        $appointments = Appointment::where('user_id', auth()->id())->get();
+        // Traer todas las citas sin importar el user_id
+        $appointments = Appointment::all();
         return view('admin.citas', compact('appointments'));
     }
 }

@@ -19,7 +19,14 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
-            return redirect()->intended(route('main')); // Redirigir a la página principal
+            $user = Auth::user();
+
+            // Redirigir según el rol del usuario
+            if ($user->role === 'admin') {
+                return redirect()->route('admin.citas'); // Redirige a la ruta del admin
+            }
+
+            return redirect()->intended(route('main')); // Redirige a la página principal para usuarios normales
         }
 
         return back()->withErrors([

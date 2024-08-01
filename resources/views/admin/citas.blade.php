@@ -5,7 +5,6 @@
 @section('container')
 <div class="container mt-5">
     <h2 class="mb-4 text-center">Lista de Citas Médicas</h2>
-    
     @if($appointments->isEmpty())
         <p class="text-center">No hay citas registradas.</p>
     @else
