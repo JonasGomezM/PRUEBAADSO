@@ -12,7 +12,7 @@ class UserMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         if (Auth::check()) {
-            if (Auth::user()->role == 'admin') {
+            if (Auth::user()->role == 'user') {
                 return $next($request);
             } else {
                 return redirect(url('login'))->with('error', 'No tienes permiso para acceder a esta página.');

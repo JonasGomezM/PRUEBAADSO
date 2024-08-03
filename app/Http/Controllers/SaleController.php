@@ -12,7 +12,7 @@ class SaleController extends Controller
     public function index()
     {
         $sales = Sale::with('user')->get();
-        return view('sales.index', compact('sales'));
+        return view('admin.facturas', compact('sales'));
     }
 
     public function store(Request $request)

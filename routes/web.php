@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Auth;
 use App\Exports\ProductsExport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\AppointmentController;
-use App\Http\Controllers\SalesController;
 
 // Ruta para la exportación a Excel
 Route::get('/products/export', function () {
@@ -33,10 +32,6 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('cart/remove/{itemId}', [CartController::class, 'remove'])->name('carts.remove');
 });
 
-
-
-
-
 // Rutas para ventas
 Route::get('sales', [SaleController::class, 'index'])->name('sales.index');
 Route::post('sales/store', [SaleController::class, 'store'])->name('sales.store');
@@ -47,7 +42,10 @@ Route::post('/login', [AuthController::class, 'login']);
 
 Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
 Route::post('/register', [AuthController::class, 'register']);
-Route::post('logout', function () { Auth::logout(); return redirect('/');})->name('logout');
+Route::post('logout', function () {
+    Auth::logout();
+    return redirect('/');
+})->name('logout');
 
 // Obtener las ofertas
 Route::get('/offers', [ProductController::class, 'showOffers'])->name('offers.index');
@@ -62,17 +60,14 @@ Route::middleware(['auth'])->group(function () {
 
 
 // Ruta para mostrar las ventas
-Route::get('/sales', [SaleController::class, 'index'])->name('sales.index');
-
-// Ruta para almacenar una nueva venta
-Route::post('/sale', [SaleController::class, 'ajaxStore'])->name('sales.ajaxStore');
 
 
 
 
 
 use App\Http\Controllers\Admin\InventarioController;
-use App\Http\Controllers\Admin\FacturasController;
+
+use App\Http\Controllers\SalesController;
 use App\Http\Controllers\Admin\CitasController;
 use App\Http\Controllers\Admin\RegistroUsuarioController;
 
@@ -80,11 +75,30 @@ Route::group(['middleware' => 'admin'], function () {
     Route::get('/admin', function () {
         return view('admin.index');
     })->name('admin.index');
-
+    
     Route::get('/inventario', [InventarioController::class, 'index'])->name('admin.inventario');
-    Route::get('/facturas', [FacturasController::class, 'index'])->name('admin.facturas');
-    Route::get('/citas', [CitasController::class, 'index'])->name('admin.citas');
-    Route::get('/registro-usuario', [RegistroUsuarioController::class, 'index'])->name('admin.registro_usuario');
-
+    Route::get('/facturas', [SaleController::class, 'index'])->name('admin.facturas');
     Route::get('/citas', [CitasController::class, 'index'])->name('admin.citas');
 });
+
+
+Route::group(['middleware' => 'admin'], function () {
+    Route::get('/admin', function () {
+        return view('admin.index');
+    })->name('admin.index');
+
+    Route::get('/inventario', [InventarioController::class, 'index'])->name('admin.inventario');
+    Route::get('/facturas', [SaleController::class, 'index'])->name('admin.facturas');
+    Route::get('/citas', [CitasController::class, 'index'])->name('admin.citas');
+    Route::get('/registro-usuario', [RegistroUsuarioController::class, 'index'])->name('admin.registro_usuario');
+    Route::get('/admin/create_user', [RegistroUsuarioController::class, 'create'])->name('admin.create_user');
+    Route::post('/admin/store_user', [RegistroUsuarioController::class, 'store'])->name('admin.store_user');
+    Route::get('/admin/edit_user/{id}', [RegistroUsuarioController::class, 'edit'])->name('admin.edit_user');
+    Route::put('/admin/update_user/{id}', [RegistroUsuarioController::class, 'update'])->name('admin.update_user');
+    Route::delete('/admin/delete_user/{id}', [RegistroUsuarioController::class, 'destroy'])->name('admin.delete_user');
+});
+
+Route::get('/sales', [SaleController::class, 'index'])->name('admin.facturas');
+
+// Ruta para almacenar una nueva venta
+Route::post('/sale', [SaleController::class, 'ajaxStore'])->name('sales.ajaxStore');
