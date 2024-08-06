@@ -1,11 +1,10 @@
-@extends('layouts.app')
+@extends('admin.index')
 
 @section('title', 'Agregar Producto')
-
-@section('content')
+@section('container')
     <div class="container mt-5">
         <h1 class="text-center mb-4">Agregar Nuevo Producto</h1>
-        <form action="{{ route('products.store') }}" method="POST">
+        <form action="{{ route('admin.storeProduct') }}" method="POST">
             @csrf
             <div class="row">
                 <div class="col-md-8 offset-md-2">
@@ -53,7 +52,7 @@
                     </div>
                     <div class="d-flex justify-content-between">
                         <button type="submit" class="btn btn-primary">Guardar</button>
-                        <a href="{{ route('products.index') }}" class="btn btn-secondary">Cancelar</a>
+                        <a href="{{ route('admin.inventario') }}" class="btn btn-secondary">Cancelar</a>
                     </div>
                 </div>
             </div>
@@ -64,7 +63,7 @@
 <!-- Estilos personalizados -->
 <style>
     .container {
-        max-width: 1200px; /* Asegura que el contenedor no se expanda demasiado */
+        max-width: 1200px;
     }
 
     h1 {

@@ -24,12 +24,16 @@
             background-color: #343a40;
             color: #fff;
             padding: 15px;
-            height: 100vh;
+            height: 100%;
             box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
             transition: all 0.3s ease-in-out;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            overflow-y: auto;
         }
         .sidebar h2 {
             font-size: 1.5em;
@@ -61,7 +65,9 @@
         .content {
             flex: 1;
             padding: 20px;
-            background-color: #f7f9fc;
+            margin-left: 250px; /* Asegúrate de que el contenido no se superponga a la barra lateral */
+            height: 100%;
+            overflow-y: auto;
             transition: all 0.3s ease-in-out;
         }
         .content h1 {
@@ -92,14 +98,6 @@
             margin-top: auto;
             padding-top: 15px;
             border-top: 1px solid #495057;
-        }
-        .toggle-btn {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            cursor: pointer;
-            font-size: 1.5em;
-            color: #343a40;
         }
         .toggle-btn i {
             transition: all 0.3s ease-in-out;
