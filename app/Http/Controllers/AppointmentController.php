@@ -30,7 +30,7 @@ class AppointmentController extends Controller
         ]);
 
         // Crear una nueva cita
-        Appointment::create([
+        $appointment = Appointment::create([
             'pet_name' => $request->pet_name,
             'owner_name' => $request->owner_name,
             'contact_number' => $request->contact_number,
@@ -68,5 +68,4 @@ class AppointmentController extends Controller
         // Redirigir de vuelta a la misma página
         return redirect()->back()->with('success', 'El estado de la cita se ha actualizado correctamente.');
     }
-
 }

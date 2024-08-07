@@ -79,24 +79,24 @@
                                     <td>{{ $appointment->appointment_time }}</td>
                                     <td>{{ $appointment->vet }}</td>
                                     <td>
-                                        <span class="badge {{ $appointment->status == 'accepted' ? 'badge-success' : 'badge-danger' }}">
-                                            {{ $appointment->status == 'accepted' ? 'Aceptada' : 'Rechazada' }}
-                                        </span>
+                                        @if ($appointment->status == 'accepted')
+                                            <span class="badge badge-success">Aceptada</span>
+                                        @elseif ($appointment->status == 'rejected')
+                                            <span class="badge badge-danger">Rechazada</span>
+                                        @else
+                                            <span class="badge badge-warning">Pendiente</span>
+                                        @endif
                                     </td>
                                     <td>
-                                        <!-- Eliminar el comentario en esta línea para habilitar la acción de aceptar -->
-                                        <!-- <form action="{{ route('appointments.updateStatus', $appointment) }}" method="POST" style="display:inline;">
-                                            @csrf
-                                            @method('PATCH')
-                                            <input type="hidden" name="status" value="accepted">
-                                            <button type="submit" class="btn btn-success btn-sm">Aceptar</button>
-                                        </form> -->
-                                        <form action="{{ route('appointments.updateStatus', $appointment) }}" method="POST" style="display:inline;">
-                                            @csrf
-                                            @method('PATCH')
-                                            <input type="hidden" name="status" value="rejected">
-                                            <button type="submit" class="btn btn-danger btn-sm">Cancelar</button>
-                                        </form>
+                                        <!-- Botón para cancelar la cita -->
+                                        @if ($appointment->status == 'pending')
+                                            <form action="{{ route('appointments.updateStatus', $appointment) }}" method="POST" style="display:inline;">
+                                                @csrf
+                                                @method('PATCH')
+                                                <input type="hidden" name="status" value="rejected">
+                                                <button type="submit" class="btn btn-danger btn-sm">Cancelar</button>
+                                            </form>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach

@@ -80,6 +80,9 @@ Route::group(['middleware' => 'admin'], function () {
 Route::group(['middleware' => 'admin'], function () {
     Route::get('/inventario', [InventarioController::class, 'index'])->name('admin.inventario');
     Route::get('/inventario/create', [InventarioController::class, 'create'])->name('admin.create');
-    Route::delete('/inventario/{product}', [InventarioController::class, 'destroy'])->name('admin.destroy');
     Route::post('/inventario/storeProduct', [InventarioController::class, 'store'])->name('admin.storeProduct');
+    Route::post('/inventario/{id}/offer', [InventarioController::class, 'offer'])->name('admin.offer');
+    Route::delete('/inventario/{product}', [InventarioController::class, 'destroy'])->name('admin.destroy');
+    Route::get('/inventario/edit_product/{id}', [InventarioController::class, 'edit'])->name('admin.edit_product');
+    Route::put('inventario/update_product/{id}', [InventarioController::class, 'update'])->name('admin.update_product');
 });

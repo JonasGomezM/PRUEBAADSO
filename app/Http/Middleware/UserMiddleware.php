@@ -15,10 +15,10 @@ class UserMiddleware
             if (Auth::user()->role == 'user') {
                 return $next($request);
             } else {
-                return redirect(url('login'))->with('error', 'No tienes permiso para acceder a esta página.');
+                return redirect(url('/'))->with('error', 'No tienes permiso para acceder a esta página.');
             }
         } else {
-            return redirect(url('login'))->with('error', 'Por favor inicia sesión.');
+            return redirect(url('/'))->with('error', 'Por favor inicia sesión.');
         }
     }
 }

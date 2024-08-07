@@ -26,6 +26,12 @@
                 </div>
             </div>
         @endif
+        <!-- Mensaje de Éxito -->
+        @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
         <!-- Lista de Productos en Filas Horizontales -->
         <div class="row">
             @foreach ($products as $product)
@@ -55,7 +61,7 @@
                                             <i class="fas fa-info-circle"></i>
                                         </a>
                                         @if (auth()->check() && auth()->user()->role === 'admin')                                    
-                                        <a href="{{ route('products.edit', $product->id) }}" class="btn btn-warning mr-2" title="Editar">
+                                        <a href="{{ route('admin.edit_product', $product->id) }}" class="btn btn-warning mr-2" title="Editar">
                                             <i class="fas fa-edit"></i>
                                         </a>
                                         <form action="{{ route('admin.destroy', $product->id) }}" method="POST" style="display:inline;">
@@ -65,7 +71,7 @@
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
                                         </form>
-                                        <form action="{{ route('products.offer', $product->id) }}" method="POST" style="display:inline;">
+                                        <form action="{{ route('admin.offer', $product->id) }}" method="POST" style="display:inline;">
                                             @csrf
                                             <button type="submit" class="btn btn-secondary" title="{{ $product->is_on_offer ? 'Eliminar de Oferta' : 'Agregar a Oferta' }}">
                                                 <i class="fas {{ $product->is_on_offer ? 'fa-times' : 'fa-tag' }}"></i>

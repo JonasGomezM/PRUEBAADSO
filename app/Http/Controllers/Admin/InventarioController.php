@@ -45,26 +45,31 @@ class InventarioController extends Controller
 
     public function show(Product $product)
     {
-        return view('products.show', compact('product'));
+        return view('admin.show', compact('product'));
     }
 
-    public function edit(Product $product)
+    public function edit($id)
     {
-        return view('products.edit', compact('product'));
+        $product = Product::findOrFail($id);
+        return view('admin.edit_product', compact('product'));
     }
 
-    public function update(Request $request, Product $product)
+
+    public function update(Request $request, $id)
     {
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'price' => 'required|numeric',
             'stock' => 'required|integer',
-            'category' => 'required|string|in:perros,gatos,ropa', // Validación para la categoría
+            'category' => 'required|string',
+            'image_url' => 'nullable|url',
         ]);
 
+        $product = Product::findOrFail($id);
         $product->update($request->all());
-        return redirect()->route('products.index')->with('success', 'Producto actualizado.');
+
+        return redirect()->route('admin.inventario')->with('success', 'Producto actualizado correctamente');
     }
 
     public function destroy(Product $product)
@@ -89,7 +94,7 @@ class InventarioController extends Controller
                 $offerProduct->delete();
             }
 
-            return redirect()->route('products.index')->with('success', 'Oferta desactivada.');
+            return redirect()->route('admin.inventario')->with('success', 'Oferta desactivada.');
         } else {
             // Si el producto no está en oferta, agrégalo a la oferta
             OfferProduct::create([
@@ -103,7 +108,7 @@ class InventarioController extends Controller
             $product->is_on_offer = true;
             $product->save();
 
-            return redirect()->route('products.index')->with('success', 'Producto agregado a la oferta.');
+            return redirect()->route('admin.inventario')->with('success', 'Producto agregado a la oferta.');
         }
     }
 }

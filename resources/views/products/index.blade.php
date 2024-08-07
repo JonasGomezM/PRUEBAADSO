@@ -16,14 +16,6 @@
                 </form>
             </div>
         </div>
-        
-        <!-- Mensaje de Éxito -->
-        @if (session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-        @endif
-
         <!-- Lista de Productos en Filas Horizontales -->
         <div class="col-md-12">
             <!-- Mostrar Productos en Oferta Solo Si Existen -->

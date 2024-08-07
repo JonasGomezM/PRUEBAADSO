@@ -30,9 +30,13 @@
                             <td>{{ $appointment->appointment_time }}</td>
                             <td>{{ $appointment->vet }}</td>
                             <td>
-                                <span class="badge {{ $appointment->status == 'accepted' ? 'badge-success' : 'badge-danger' }}">
-                                    {{ $appointment->status == 'accepted' ? 'Aceptada' : 'Rechazada' }}
-                                </span>
+                                @if ($appointment->status == 'accepted')
+                                    <span class="badge badge-success">Aceptada</span>
+                                @elseif ($appointment->status == 'rejected')
+                                    <span class="badge badge-danger">Rechazada</span>
+                                @else
+                                    <span class="badge badge-warning">Pendiente</span>
+                                @endif
                             </td>
                             <td class="text-center">
                                 <div class="btn-group" role="group" aria-label="Acciones">
