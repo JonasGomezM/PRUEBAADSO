@@ -4,6 +4,7 @@
 
 @section('content')
     <div class="container-fluid px-0">
+
         <!-- Mensaje de Bienvenida -->
         <div class="text-center my-4">
             <h1 class="display-3 font-weight-bold">Bienvenido a la Página Principal</h1>
@@ -50,9 +51,15 @@
             <div class="col-md-3 mb-4">
                 <h4 class="font-weight-bold mb-3">Categorías</h4>
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item">Perros</li>
-                    <li class="list-group-item">Gatos</li>
-                    <li class="list-group-item">Ropa</li>
+                    <li class="list-group-item d-flex align-items-center">
+                        <i class="fas fa-dog mr-2"></i> Perros
+                    </li>
+                    <li class="list-group-item d-flex align-items-center">
+                        <i class="fas fa-cat mr-2"></i> Gatos
+                    </li>
+                    <li class="list-group-item d-flex align-items-center">
+                        <i class="fas fa-tshirt mr-2"></i> Ropa
+                    </li>
                 </ul>
             </div>
 
@@ -214,6 +221,7 @@
         .btn-primary {
             background-color: #007bff;
             border: none;
+            transition: background-color 0.3s ease;
         }
 
         .btn-primary:hover {
@@ -223,6 +231,7 @@
         .btn-success {
             background-color: #28a745;
             border: none;
+            transition: background-color 0.3s ease;
         }
 
         .btn-success:hover {
@@ -232,6 +241,7 @@
         .btn-info {
             background-color: #17a2b8;
             border: none;
+            transition: background-color 0.3s ease;
         }
 
         .btn-info:hover {

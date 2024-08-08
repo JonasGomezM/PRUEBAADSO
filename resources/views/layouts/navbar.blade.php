@@ -13,30 +13,53 @@
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('offers.index') }}">Ofertas</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ route('appointments.create') }}">Citas Médicas</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ route('carts.index') }}">
-                    <i class="fas fa-shopping-cart {{ $cartProductsCount > 0 ? 'text-danger' : 'text-secondary' }}"></i>
-                    @if($cartProductsCount > 0)
-                        <span class="badge badge-danger">{{ $cartProductsCount }}</span>
-                    @endif
-                </a>
-            </li>
-            @if (Auth::check())
+            @if (auth()->check() && auth()->user()->role === 'admin')
                 <li class="nav-item">
-                    <a class="btn btn-secondary" href="#">{{ Auth::user()->name }}</a>
+                    <a class="nav-link" href="{{ route('admin.citas') }}">Citas</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('admin.facturas') }}">Facturas</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('admin.registro_usuario') }}">Registro usuario</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('admin.inventario') }}">Inventario</a>
+                </li>
+            @else
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('appointments.create') }}">Citas Médicas</a>
+                </li>
+            @endif
+            @if (auth()->check() && auth()->user()->role === 'user')
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('carts.index') }}">
+                        <i class="fas fa-shopping-cart {{ $cartProductsCount > 0 ? 'text-danger' : 'text-secondary' }}"></i>
+                        @if($cartProductsCount > 0)
+                            <span class="badge badge-danger">{{ $cartProductsCount }}</span>
+                        @endif
+                    </a>
+                </li>
+            @endif
+            @if (Auth::check())
+                <li class="nav-item user-button">
+                    <a class="btn btn-secondary" href="#">
+                        <i class="fas fa-user"></i> {{ Auth::user()->name }}
+                    </a>
                 </li>
                 <li class="nav-item">
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                        <button type="submit" class="btn btn-danger">Cerrar Sesión</button>
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </button>
                     </form>
                 </li>
             @else
                 <li class="nav-item">
-                    <a class="btn btn-primary" href="{{ route('login') }}">Iniciar Sesión</a>
+                    <a class="btn btn btn-danger" href="{{ route('login') }}">
+                        <i class="fas fa-sign-in-alt"></i> Iniciar Sesion
+                    </a>
                 </li>
             @endif
         </ul>
@@ -60,7 +83,7 @@
     }
 
     .navbar-nav .nav-link:hover {
-        color: #6A0DAD;
+        color: #FF5722;
     }
 
     .navbar-toggler {
@@ -72,42 +95,46 @@
     }
 
     .btn-secondary {
-        background-color: #6A0DAD;
-        border-color: #6A0DAD;
+        background-color: #FF5722;
+        border-color: #FF5722;
         color: #ffffff;
         transition: background-color 0.3s ease, border-color 0.3s ease;
     }
 
     .btn-secondary:hover {
-        background-color: #8A2BE2;
-        border-color: #8A2BE2;
+        background-color: #FF7043;
+        border-color: #FF7043;
     }
 
     .btn-primary {
-        background-color: #6A0DAD;
-        border-color: #6A0DAD;
+        background-color: #8A2BE2;
+        border-color: #8A2BE2;
         color: #ffffff;
         transition: background-color 0.3s ease, border-color 0.3s ease;
     }
 
     .btn-primary:hover {
-        background-color: #8A2BE2;
-        border-color: #8A2BE2;
+        background-color: #9B30FF;
+        border-color: #9B30FF;
     }
 
     .btn-danger {
-        background-color: #d9534f;
-        border-color: #d9534f;
+        background-color: #FF5722;
+        border-color: #FF5722;
         color: #ffffff;
         transition: background-color 0.3s ease, border-color 0.3s ease;
     }
 
     .btn-danger:hover {
-        background-color: #c9302c;
-        border-color: #c9302c;
+        background-color: #E64A19;
+        border-color: #E64A19;
     }
 
     .badge-danger {
-        background-color: #d9534f;
+        background-color: #FF5722;
+    }
+
+    .user-button {
+        margin-right: 10px;
     }
 </style>

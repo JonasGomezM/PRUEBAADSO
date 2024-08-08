@@ -36,7 +36,7 @@
                         <td>{{ $sale->id }}</td>
                         <td>${{ number_format($sale->total, 2) }}</td>
                         <td>{{ $sale->created_at->format('Y-m-d H:i:s') }}</td>
-                        <td>{{ $sale->user->name }}</td>
+                        <td>{{ $sale->user ? $sale->user->name : 'Usuario no encontrado' }}</td>
                         <td>
                             <!-- Icono de FontAwesome para generar factura -->
                             <button class="btn btn-primary">

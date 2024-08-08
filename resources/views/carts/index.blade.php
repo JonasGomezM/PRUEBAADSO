@@ -51,8 +51,11 @@
                     </tr>
                 </tfoot>
             </table>
-            <!-- Botón para proceder a la compra -->
-            <button id="buy-button" class="btn btn-primary mt-3">Comprar</button>
+            <!-- Formulario para proceder a la compra -->
+            <form id="purchase-form" action="{{ route('sales.store') }}" method="POST">
+                @csrf
+                <button type="submit" class="btn btn-primary mt-3">Comprar</button>
+            </form>
         @else
             <div class="alert alert-info" role="alert">
                 Tu carrito está vacío.
@@ -60,9 +63,27 @@
         @endif
     </div>
 
+    <!-- Modal de Cargando -->
+    <div class="modal fade" id="loadingModal" tabindex="-1" role="dialog" aria-labelledby="loadingModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="loadingModalLabel">Procesando</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body text-center">
+                    <i class="fas fa-spinner fa-spin fa-4x text-primary"></i>
+                    <p class="mt-3">Estamos procesando tu compra. Por favor, espera...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal de Compra Exitosa -->
     <div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="successModalLabel">Compra Exitosa</h5>
@@ -105,45 +126,37 @@
             // Inicializa el total
             updateTotal();
 
-            // Maneja el clic en el botón Comprar
-            document.getElementById('buy-button').addEventListener('click', function() {
-                const items = Array.from(document.querySelectorAll('#cart-items tr')).map(row => {
-                    return {
-                        id: row.getAttribute('data-id'),
-                        quantity: parseInt(row.querySelector('.quantity-input').value)
-                    };
-                });
+            // Manejar el envío del formulario
+            document.getElementById('purchase-form').addEventListener('submit', function(event) {
+                event.preventDefault(); // Evita el envío por defecto
+                $('#loadingModal').modal('show'); // Muestra el modal de cargando
 
-                const total = parseFloat(document.getElementById('total').textContent.replace('$', ''));
+                const form = this;
+                const formData = new FormData(form);
 
-                fetch('/sale', {
+                fetch(form.action, {
                     method: 'POST',
+                    body: formData,
                     headers: {
-                        'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    body: JSON.stringify({
-                        items: items,
-                        total: total
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        // Mostrar el modal en lugar de la alerta
-                        $('#successModal').modal('show');
-                        // Recargar la página después de cerrar el modal
-                        $('#successModal').on('hidden.bs.modal', function () {
-                            location.reload();
-                        });
-                    } else {
-                        alert('Error al procesar la compra: ' + data.error);
                     }
-                })
-                .catch(error => {
-                    alert('Error al procesar la compra.');
-                    console.error('Error:', error);
-                });
+                }).then(response => response.json())
+                  .then(data => {
+                      $('#loadingModal').modal('hide'); // Oculta el modal de cargando
+                      if (data.success) {
+                          $('#successModal').modal('show'); // Muestra el modal de éxito
+                      } else {
+                          alert('Hubo un problema con tu compra.');
+                      }
+                  }).catch(error => {
+                      $('#loadingModal').modal('hide'); // Oculta el modal de cargando
+                      alert('Hubo un error procesando tu compra.');
+                  });
+            });
+
+            // Recargar la página al cerrar el modal de éxito
+            $('#successModal').on('hidden.bs.modal', function () {
+                window.location.href = '{{ route("carts.index") }}'; // Redirige a la página del carrito
             });
         });
     </script>

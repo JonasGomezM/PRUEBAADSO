@@ -1,13 +1,14 @@
 <?php
 
-
 namespace App\Http\Controllers;
 
+use App\Mail\SaleNotificationMailable;
 use App\Models\Cart;
 use App\Models\Sale;
 use App\Models\SaleItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class SaleController extends Controller
 {
@@ -18,38 +19,43 @@ class SaleController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $validatedData = $request->validate([
-            'total' => 'required|numeric|min:0',
-        ]);
-
-        $cart = Cart::where('user_id', Auth::id())->first();
-        if (!$cart) return redirect()->route('carts.index');
-
-        $total = $validatedData['total'];
-        $userId = Auth::id();
-
-        $sale = Sale::create([
-            'user_id' => $userId,
-            'total' => $total,
-        ]);
-
-        foreach ($cart->items as $item) {
-            if ($item->product) {
-                SaleItem::create([
-                    'sale_id' => $sale->id,
-                    'product_id' => $item->product_id,
-                    'quantity' => $item->quantity,
-                    'price' => $item->product->price,
-                ]);
-            } else {
-                return redirect()->route('carts.index')->with('error', 'Uno o más productos en el carrito son inválidos.');
-            }
-        }
-
-        $cart->delete(); // Vaciar carrito
-        return redirect()->route('sales.index')->with('success', 'La compra fue exitosa.');
+{
+    $cart = Cart::where('user_id', Auth::id())->first();
+    if (!$cart) {
+        return response()->json(['success' => false, 'message' => 'Tu carrito está vacío.']);
     }
+
+    $total = $cart->items->sum(function($item) {
+        return $item->product->price * $item->quantity;
+    });
+
+    $userId = Auth::id();
+
+    $sale = Sale::create([
+        'user_id' => $userId,
+        'total' => $total,
+    ]);
+
+    foreach ($cart->items as $item) {
+        if ($item->product) {
+            SaleItem::create([
+                'sale_id' => $sale->id,
+                'product_id' => $item->product_id,
+                'quantity' => $item->quantity,
+                'price' => $item->product->price,
+            ]);
+        } else {
+            return response()->json(['success' => false, 'message' => 'Uno o más productos en el carrito son inválidos.']);
+        }
+    }
+
+    Mail::to(Auth::user()->email)->send(new SaleNotificationMailable($sale));
+
+    $cart->delete();
+
+    return response()->json(['success' => true, 'message' => 'La compra fue exitosa.']);
+}
+
 
     public function ajaxStore(Request $request)
     {
@@ -77,7 +83,11 @@ class SaleController extends Controller
             }
         }
 
-        $cart->delete(); // Vaciar carrito
+        // Enviar correo electrónico con la factura
+        Mail::to(Auth::user()->email)->send(new SaleNotificationMailable($sale));
+
+        // Vaciar carrito
+        $cart->delete();
 
         return response()->json(['success' => 'Compra realizada con éxito']);
     }

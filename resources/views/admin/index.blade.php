@@ -115,6 +115,7 @@
             <li><a href="{{ route('admin.facturas') }}"><i class="fas fa-file-invoice"></i> <span>Facturas</span></a></li>
             <li><a href="{{ route('admin.citas') }}"><i class="fas fa-calendar-alt"></i> <span>Listado de Citas</span></a></li>
             <li><a href="{{ route('admin.registro_usuario') }}"><i class="fas fa-user-plus"></i> <span>Registro de Usuario</span></a></li>
+            <li><a href="{{ route('main') }}"><i class="fas fa-home"></i> <span>Página Principal</span></a></li>
         </ul>
         <div class="logout">
             <li><a href="{{ route('logout') }}"><i class="fas fa-sign-out-alt"></i> <span>Cerrar Sesión</span></a></li>

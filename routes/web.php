@@ -38,10 +38,13 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // Rutas para ventas
-Route::get('sales', [SaleController::class, 'index'])->name('sales.index');
+Route::group(['middleware' => 'admin'], function () {
+    Route::get('/facturas', [SaleController::class, 'index'])->name('admin.facturas');
+    // Ruta para almacenar una venta mediante AJAX (ajaxStore)
+    Route::post('/sale', [SaleController::class, 'ajaxStore'])->name('sales.ajaxStore');
+});
+// Ruta para almacenar una venta (store)
 Route::post('sales/store', [SaleController::class, 'store'])->name('sales.store');
-Route::get('/sales', [SaleController::class, 'index'])->name('admin.facturas');
-Route::post('/sale', [SaleController::class, 'ajaxStore'])->name('sales.ajaxStore');
 
 // Rutas para autenticación
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -67,7 +70,6 @@ Route::group(['middleware' => 'admin'], function () {
         return view('admin.index');
     })->name('admin.index');
 
-    Route::get('/facturas', [SaleController::class, 'index'])->name('admin.facturas');
     Route::get('/citas', [CitasController::class, 'index'])->name('admin.citas');
     Route::get('/registro-usuario', [RegistroUsuarioController::class, 'index'])->name('admin.registro_usuario');
     Route::get('/admin/create_user', [RegistroUsuarioController::class, 'create'])->name('admin.create_user');
@@ -90,9 +92,9 @@ Route::group(['middleware' => 'admin'], function () {
 
 
 
-Route::get('contactanos', function () {
-    Mail::to('123jona97@gmail.com')->send(new SaleNotificationMailable());
+// Route::get('contactanos', function () {
+//     Mail::to('123jona97@gmail.com')->send(new SaleNotificationMailable());
 
-    return 'mensaje enviado';
-})->name('contactanos');
+//     return 'mensaje enviado';
+// })->name('contactanos');
 

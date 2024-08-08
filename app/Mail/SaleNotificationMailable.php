@@ -2,52 +2,34 @@
 
 namespace App\Mail;
 
+use App\Models\Sale;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
-use Illuminate\Mail\Mailables\Content;
-use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Mpdf\Mpdf;
 
 class SaleNotificationMailable extends Mailable
 {
     use Queueable, SerializesModels;
 
-    /**
-     * Create a new message instance.
-     */
-    public function __construct()
+    public $sale;
+
+    public function __construct(Sale $sale)
     {
-        //
+        $this->sale = $sale;
     }
 
-    /**
-     * Get the message envelope.
-     */
-    public function envelope(): Envelope
+    public function build()
     {
-        return new Envelope(
-            subject: 'Sale Notification Mailable',
-        );
-    }
+        // Generar PDF con mPDF
+        $mpdf = new Mpdf();
+        $mpdf->WriteHTML(view('emails.invoice', ['sale' => $this->sale])->render());
+        $pdfContent = $mpdf->Output('', 'S');
 
-    /**
-     * Get the message content definition.
-     */
-    public function content(): Content
-    {
-        return new Content(
-            view: 'emails.contactanos',
-        );
-    }
-
-    /**
-     * Get the attachments for the message.
-     *
-     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
-     */
-    public function attachments(): array
-    {
-        return [];
+        return $this->subject('Compra Exitosa')
+                    ->view('emails.sale_confirmation')
+                    ->attachData($pdfContent, 'factura.pdf', [
+                        'mime' => 'application/pdf',
+                    ]);
     }
 }
