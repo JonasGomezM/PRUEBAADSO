@@ -124,18 +124,21 @@
                     },
                     body: JSON.stringify({
                         items: items,
-                        total: total,
-                        user_id: {{ Auth::id() }}
+                        total: total
                     })
                 })
                 .then(response => response.json())
                 .then(data => {
-                    // Mostrar el modal en lugar de la alerta
-                    $('#successModal').modal('show');
-                    // Recargar la página después de cerrar el modal
-                    $('#successModal').on('hidden.bs.modal', function () {
-                        location.reload();
-                    });
+                    if (data.success) {
+                        // Mostrar el modal en lugar de la alerta
+                        $('#successModal').modal('show');
+                        // Recargar la página después de cerrar el modal
+                        $('#successModal').on('hidden.bs.modal', function () {
+                            location.reload();
+                        });
+                    } else {
+                        alert('Error al procesar la compra: ' + data.error);
+                    }
                 })
                 .catch(error => {
                     alert('Error al procesar la compra.');

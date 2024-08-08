@@ -1,4 +1,6 @@
 <?php
+
+
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
@@ -19,16 +21,16 @@ class SaleController extends Controller
     {
         $validatedData = $request->validate([
             'total' => 'required|numeric|min:0',
-            'user_id' => 'required|integer|exists:users,id',
         ]);
 
         $cart = Cart::where('user_id', Auth::id())->first();
         if (!$cart) return redirect()->route('carts.index');
 
         $total = $validatedData['total'];
+        $userId = Auth::id();
 
         $sale = Sale::create([
-            'user_id' => $validatedData['user_id'],
+            'user_id' => $userId,
             'total' => $total,
         ]);
 

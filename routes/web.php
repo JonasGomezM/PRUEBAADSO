@@ -13,7 +13,8 @@ use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\Admin\InventarioController;
 use App\Http\Controllers\Admin\CitasController;
 use App\Http\Controllers\Admin\RegistroUsuarioController;
-use App\Http\Controllers\SalesController;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\SaleNotificationMailable;
 
 // Ruta para la exportación a Excel
 Route::get('/products/export', function () {
@@ -86,3 +87,12 @@ Route::group(['middleware' => 'admin'], function () {
     Route::get('/inventario/edit_product/{id}', [InventarioController::class, 'edit'])->name('admin.edit_product');
     Route::put('inventario/update_product/{id}', [InventarioController::class, 'update'])->name('admin.update_product');
 });
+
+
+
+Route::get('contactanos', function () {
+    Mail::to('123jona97@gmail.com')->send(new SaleNotificationMailable());
+
+    return 'mensaje enviado';
+})->name('contactanos');
+
