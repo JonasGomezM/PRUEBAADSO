@@ -4,13 +4,6 @@
 
 @section('content')
     <div class="container-fluid px-0">
-
-        <!-- Mensaje de Bienvenida -->
-        <div class="text-center my-4">
-            <h1 class="display-3 font-weight-bold">Bienvenido a la Página Principal</h1>
-            <p class="lead text-muted">Explora nuestros productos y ofertas.</p>
-        </div>
-
         <!-- Carrusel de Imágenes -->
         <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
             <ol class="carousel-indicators">
@@ -38,11 +31,26 @@
                 <span class="sr-only">Siguiente</span>
             </a>
         </div>
+        <!-- Mensaje de Bienvenida -->
+        <div class="text-center my-4">
+            {{-- <h1 class="display-3 font-weight-bold">Bienvenido a la Página Principal</h1> --}}
+            <p class="lead text-muted">Explora nuestros productos y ofertas.</p>
+        </div>
 
-        <!-- Inputs de Búsqueda -->
+        <!-- Formulario de Búsqueda con Botón -->
         <div class="row my-4">
             <div class="col-md-12">
-                <input type="text" class="form-control form-control-lg shadow-sm" placeholder="Buscar productos por nombre...">
+                <form method="GET" action="{{ route('main') }}">
+                    <div class="input-group">
+                        <input type="text" name="search" class="form-control form-control-lg shadow-sm"
+                            placeholder="Buscar productos por nombre..." value="{{ request('search') }}">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary btn-lg" type="submit">
+                                <i class="fas fa-search"></i> Buscar
+                            </button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
 
@@ -52,42 +60,55 @@
                 <h4 class="font-weight-bold mb-3">Categorías</h4>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item d-flex align-items-center">
-                        <i class="fas fa-dog mr-2"></i> Perros
+                        <a href="{{ route('products.index', ['category' => 'perros', 'search' => request('search')]) }}">
+                            <i class="fas fa-dog mr-2"></i> Perros
+                        </a>
                     </li>
                     <li class="list-group-item d-flex align-items-center">
-                        <i class="fas fa-cat mr-2"></i> Gatos
+                        <a href="{{ route('products.index', ['category' => 'gatos', 'search' => request('search')]) }}">
+                            <i class="fas fa-cat mr-2"></i> Gatos
+                        </a>
                     </li>
                     <li class="list-group-item d-flex align-items-center">
-                        <i class="fas fa-tshirt mr-2"></i> Ropa
+                        <a href="{{ route('products.index', ['category' => 'ropa', 'search' => request('search')]) }}">
+                            <i class="fas fa-tshirt mr-2"></i> Ropa
+                        </a>
                     </li>
                 </ul>
             </div>
 
+
             <!-- Sección Principal -->
             <div class="col-md-9">
                 <!-- Mostrar Productos en Oferta Solo Si Existen -->
-                @if($offerProducts->count())
+                @if ($offerProducts->count())
                     <div class="mt-5">
                         <h2 class="font-weight-bold mb-4">Productos en Oferta</h2>
                         <div id="offerProductsCarousel" class="carousel slide" data-ride="carousel">
                             <div class="carousel-inner">
-                                @foreach($offerProducts->chunk(3) as $chunk)
+                                @foreach ($offerProducts->chunk(3) as $chunk)
                                     <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
                                         <div class="row">
-                                            @foreach($chunk as $product)
+                                            @foreach ($chunk as $product)
                                                 <div class="col-md-4 mb-4">
                                                     <div class="card border-light shadow-sm">
-                                                        @if($product->image_url)
-                                                            <img class="card-img-top" src="{{ $product->image_url }}" alt="Imagen del Producto" style="height: 150px; object-fit: cover;">
+                                                        @if ($product->image_url)
+                                                            <img class="card-img-top" src="{{ $product->image_url }}"
+                                                                alt="Imagen del Producto"
+                                                                style="height: 150px; object-fit: cover;">
                                                         @else
-                                                            <img class="card-img-top" src="{{ asset('images/product-placeholder.png') }}" alt="Imagen del Producto">
+                                                            <img class="card-img-top"
+                                                                src="{{ asset('images/product-placeholder.png') }}"
+                                                                alt="Imagen del Producto">
                                                         @endif
                                                         <div class="card-body">
                                                             <h5 class="card-title">{{ $product->name }}</h5>
                                                             <p class="card-text">{{ $product->description }}</p>
                                                             <div class="d-flex justify-content-between align-items-center">
-                                                                <p class="card-text mb-0"><strong>Precio:</strong> ${{ $product->price }}</p>
-                                                                <form method="POST" action="{{ route('carts.add', $product->id) }}">
+                                                                <p class="card-text mb-0"><strong>Precio:</strong>
+                                                                    ${{ $product->price }}</p>
+                                                                <form method="POST"
+                                                                    action="{{ route('carts.add', $product->id) }}">
                                                                     @csrf
                                                                     <input type="hidden" name="quantity" value="1">
                                                                     <button type="submit" class="btn btn-primary">
@@ -103,11 +124,13 @@
                                     </div>
                                 @endforeach
                             </div>
-                            <a class="carousel-control-prev" href="#offerProductsCarousel" role="button" data-slide="prev">
+                            <a class="carousel-control-prev" href="#offerProductsCarousel" role="button"
+                                data-slide="prev">
                                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                                 <span class="sr-only">Anterior</span>
                             </a>
-                            <a class="carousel-control-next" href="#offerProductsCarousel" role="button" data-slide="next">
+                            <a class="carousel-control-next" href="#offerProductsCarousel" role="button"
+                                data-slide="next">
                                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                 <span class="sr-only">Siguiente</span>
                             </a>
@@ -123,13 +146,15 @@
                 <div class="mt-5">
                     <h2 class="font-weight-bold mb-4">Productos Recientes</h2>
                     <div class="row">
-                        @foreach($products as $product)
+                        @foreach ($products as $product)
                             <div class="col-md-4 mb-4">
                                 <div class="card border-light shadow-sm">
-                                    @if($product->image_url)
-                                        <img class="card-img-top" src="{{ $product->image_url }}" alt="Imagen del Producto" style="height: 150px; object-fit: cover;">
+                                    @if ($product->image_url)
+                                        <img class="card-img-top" src="{{ $product->image_url }}"
+                                            alt="Imagen del Producto" style="height: 150px; object-fit: cover;">
                                     @else
-                                        <img class="card-img-top" src="{{ asset('images/product-placeholder.png') }}" alt="Imagen del Producto">
+                                        <img class="card-img-top" src="{{ asset('images/product-placeholder.png') }}"
+                                            alt="Imagen del Producto">
                                     @endif
                                     <div class="card-body">
                                         <h5 class="card-title">{{ $product->name }}</h5>
@@ -206,7 +231,7 @@
 
         .card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
         .card-img-top {

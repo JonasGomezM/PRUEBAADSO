@@ -2,7 +2,25 @@
 
 @section('container')
     <div class="container mt-5">
-        <h1 class="text-center mb-4">Lista de Productos</h1>
+        <div class="d-flex align-items-center mb-4">
+            <h1 class="mb-0">Lista de Productos</h1>
+
+            <!-- Mostrar cantidad de productos y productos en oferta a la derecha del título -->
+            <div class="d-flex ml-auto">
+                <div class="card text-center bg-primary text-white mx-2" style="width: 50px; height: 50px; padding: 0;">
+                    <div class="card-body p-1">
+                        <i class="fas fa-box-open fa-xs mb-1"></i>
+                        <p class="card-text mb-0" style="font-size: 0.75rem;">{{ $productCount }}</p>
+                    </div>
+                </div>
+                <div class="card text-center bg-success text-white mx-2" style="width: 50px; height: 50px; padding: 0;">
+                    <div class="card-body p-1">
+                        <i class="fas fa-tags fa-xs mb-1"></i>
+                        <p class="card-text mb-0" style="font-size: 0.75rem;">{{ $offerProductCount }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- Formulario de Búsqueda -->
         <div class="row mb-4">

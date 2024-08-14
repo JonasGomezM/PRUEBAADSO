@@ -10,17 +10,25 @@ use App\Models\OfferProduct;
 class InventarioController extends Controller
 {
     public function index(Request $request)
-    {
-        $query = $request->input('query');
+{
+    $query = $request->input('query');
 
-        $products = Product::when($query, function ($queryBuilder, $query) {
-            return $queryBuilder->where('name', 'like', "%{$query}%");
-        })->get();
+    $products = Product::when($query, function ($queryBuilder, $query) {
+        return $queryBuilder->where('name', 'like', "%{$query}%");
+    })->get();
 
-        $offerProducts = Product::where('is_on_offer', true)->get();
+    $offerProducts = Product::where('is_on_offer', true)->get();
 
-        return view('admin.inventario', compact('products', 'offerProducts'));
-    }
+    // Contar la cantidad de productos
+    $productCount = $products->count();
+
+    // Contar la cantidad de productos en oferta
+    $offerProductCount = $offerProducts->count();
+
+    return view('admin.inventario', compact('products', 'offerProducts', 'productCount', 'offerProductCount'));
+}
+
+
 
     public function create()
     {

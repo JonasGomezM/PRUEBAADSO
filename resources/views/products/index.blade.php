@@ -19,7 +19,7 @@
         <!-- Lista de Productos en Filas Horizontales -->
         <div class="col-md-12">
             <!-- Mostrar Productos en Oferta Solo Si Existen -->
-            @if($offerProducts->count())
+            {{-- @if($offerProducts->count())
                 <div class="mt-5">
                     <h2 class="font-weight-bold mb-4">Productos en Oferta</h2>
                     <div id="offerProductsCarousel" class="carousel slide" data-ride="carousel">
@@ -70,8 +70,7 @@
                         </div>
                     </div>
                 </div>
-            @endif
-
+            @endif --}}
             <!-- Mostrar Productos Recientes -->
             <div class="mt-5">
                 <h2 class="font-weight-bold mb-4">Productos Recientes</h2>

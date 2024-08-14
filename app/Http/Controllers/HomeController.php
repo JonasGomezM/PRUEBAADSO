@@ -3,13 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // Obtener todos los productos
-        $products = Product::all();
+        // Obtener el término de búsqueda de la solicitud
+        $search = $request->input('search');
+
+        // Si hay un término de búsqueda, filtrar los productos por nombre
+        $products = Product::when($search, function ($query, $search) {
+            return $query->where('name', 'like', "%{$search}%");
+        })->get();
         
         // Obtener productos en oferta
         $offerProducts = Product::where('is_on_offer', true)->get();
