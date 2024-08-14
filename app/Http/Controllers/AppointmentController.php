@@ -11,7 +11,7 @@ class AppointmentController extends Controller
     public function create()
     {
         // Obtener las citas del usuario autenticado
-        $appointments = Appointment::where('user_id', auth()->id())->get();
+        $appointments = Appointment::where('user_id', auth())->get();
         return view('appointments.create', compact('appointments'));
     }
 
@@ -39,7 +39,7 @@ class AppointmentController extends Controller
             'appointment_time' => $request->appointment_time,
             'vet' => $request->vet,
             'notes' => $request->notes,
-            'user_id' => auth()->id(), // Asignar el usuario autenticado
+            'user_id' => auth(), // Asignar el usuario autenticado
             'status' => 'pending', // Estado inicial
         ]);
 
