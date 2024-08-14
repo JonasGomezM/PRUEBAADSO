@@ -12,12 +12,12 @@ class RegistroUsuarioController extends Controller
     public function index()
     {
         $users = User::all();
-        return view('admin.registro_usuario', compact('users'));
+        return response()->json($users);
     }
 
     public function create()
     {
-        return view('admin.create_user');
+        return response()->json(['message' => 'Crear usuario']);
     }
 
     public function store(Request $request)
@@ -29,21 +29,20 @@ class RegistroUsuarioController extends Controller
             'role' => 'required|string',
         ]);
 
-        User::create([
+        $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => $request->role,
         ]);
 
-        return redirect()->route('admin.registro_usuario')->with('success', 'Usuario creado exitosamente.');
+        return response()->json(['message' => 'Usuario creado exitosamente.', 'user' => $user]);
     }
-
 
     public function edit($id)
     {
         $user = User::findOrFail($id);
-        return view('admin.edit_user', compact('user'));
+        return response()->json($user);
     }
 
     public function update(Request $request, $id)
@@ -64,13 +63,13 @@ class RegistroUsuarioController extends Controller
         $user->role = $request->role;
         $user->save();
 
-        return redirect()->route('admin.registro_usuario')->with('success', 'Usuario actualizado exitosamente.');
+        return response()->json(['message' => 'Usuario actualizado exitosamente.', 'user' => $user]);
     }
 
     public function destroy($id)
     {
         $user = User::findOrFail($id);
         $user->delete();
-        return redirect()->route('admin.registro_usuario')->with('success', 'Usuario eliminado exitosamente.');
+        return response()->json(['message' => 'Usuario eliminado exitosamente.']);
     }
 }

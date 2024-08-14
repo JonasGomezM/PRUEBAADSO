@@ -12,6 +12,6 @@ class CitasController extends Controller
     {
         // Traer todas las citas sin importar el user_id
         $appointments = Appointment::all();
-        return view('admin.citas', compact('appointments'));
+        return response()->json($appointments);
     }
 }

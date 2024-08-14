@@ -11,32 +11,40 @@ class AuthController extends Controller
 {
     public function showLoginForm()
     {
-        return view('auth.login');
+        return response()->json(['message' => 'Mostrar formulario de inicio de sesión']);
     }
 
     public function login(Request $request)
     {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
-            $user = Auth::user();
+            $request->session()->regenerate();
 
-            // Redirigir según el rol del usuario
-            if ($user->role === 'admin') {
-                return redirect()->route('admin.citas'); // Redirige a la ruta del admin
-            }
-
-            return redirect()->intended(route('main')); // Redirige a la página principal para usuarios normales
+            return response()->json(['message' => 'Inicio de sesión exitoso']);
         }
 
-        return back()->withErrors([
-            'email' => 'Las credenciales no coinciden con nuestros registros.',
-        ]);
+        return response()->json(['message' => 'Las credenciales no coinciden con nuestros registros'], 401);
     }
 
-    public function showRegisterForm()
+    public function logout(Request $request)
     {
-        return view('auth.register');
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return response()->json(['message' => 'Cierre de sesión exitoso']);
+    }
+
+    public function showRegistrationForm()
+    {
+        return response()->json(['message' => 'Mostrar formulario de registro']);
     }
 
     public function register(Request $request)
@@ -47,12 +55,12 @@ class AuthController extends Controller
             'password' => 'required|string|min:8|confirmed',
         ]);
 
-        User::create([
+        $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
 
-        return redirect()->route('login')->with('success', 'Usuario registrado exitosamente.');
+        return response()->json(['message' => 'Usuario registrado exitosamente', 'user' => $user]);
     }
 }

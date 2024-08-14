@@ -4,20 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Models\Appointment;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class AppointmentController extends Controller
 {
     public function create()
     {
         // Obtener las citas del usuario autenticado
-        $appointments = Appointment::where('user_id', auth()->id())->get();
-        return view('appointments.create', compact('appointments'));
+        $appointments = Appointment::where('user_id', auth())->get();
+        return response()->json($appointments);
     }
 
     public function store(Request $request)
     {
-        // Validar la solicitud
         $request->validate([
             'pet_name' => 'required|string|max:255',
             'owner_name' => 'required|string|max:255',
@@ -29,7 +27,6 @@ class AppointmentController extends Controller
             'notes' => 'nullable|string',
         ]);
 
-        // Crear una nueva cita
         $appointment = Appointment::create([
             'pet_name' => $request->pet_name,
             'owner_name' => $request->owner_name,
@@ -39,19 +36,17 @@ class AppointmentController extends Controller
             'appointment_time' => $request->appointment_time,
             'vet' => $request->vet,
             'notes' => $request->notes,
-            'user_id' => auth()->id(), // Asignar el usuario autenticado
-            'status' => 'pending', // Estado inicial
+            'user_id' => auth(),
+            'status' => 'pending',
         ]);
 
-        // Redirigir a la vista de creación con mensaje de éxito
-        return redirect()->route('appointments.create')->with('success', 'Cita médica registrada correctamente.');
+        return response()->json(['message' => 'Cita médica registrada correctamente.', 'appointment' => $appointment]);
     }
 
     public function index()
     {
-        // Obtener todas las citas
         $appointments = Appointment::all();
-        return view('appointments.index', compact('appointments'));
+        return response()->json($appointments);
     }
 
     public function updateStatus(Request $request, Appointment $appointment)
@@ -60,12 +55,10 @@ class AppointmentController extends Controller
             'status' => 'required|in:accepted,rejected',
         ]);
 
-        // Actualizar el estado de la cita
         $appointment->update([
             'status' => $request->status,
         ]);
 
-        // Redirigir de vuelta a la misma página
-        return redirect()->back()->with('success', 'El estado de la cita se ha actualizado correctamente.');
+        return response()->json(['message' => 'El estado de la cita se ha actualizado correctamente.', 'appointment' => $appointment]);
     }
 }

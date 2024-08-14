@@ -12,43 +12,43 @@ class CartController extends Controller
 {
     public function index()
     {
-        // Obtener el carrito del usuario autenticado
         $cart = Cart::where('user_id', Auth::id())->first();
-        $items = $cart ? $cart->items : collect([]); // Asegúrate de que $items sea una colección
+        $items = $cart ? $cart->items : collect([]);
 
-        // Calcular el total
         $total = $items->sum(function ($item) {
             return $item->product ? $item->quantity * $item->product->price : 0;
         });
 
-        // Retornar la vista con los elementos y el total
-        return view('carts.index', compact('items', 'total'));
+        return response()->json(['items' => $items, 'total' => $total]);
     }
-
 
     public function add(Request $request, $productId)
     {
         $cart = Cart::firstOrCreate(['user_id' => Auth::id()]);
         $product = Product::find($productId);
 
-        CartItem::updateOrCreate(
+        $cartItem = CartItem::updateOrCreate(
             ['cart_id' => $cart->id, 'product_id' => $productId],
             ['quantity' => $request->quantity]
         );
 
-        return redirect()->back()->with('success', 'Producto agregado al carrito exitosamente.');
+        return response()->json(['message' => 'Producto agregado al carrito exitosamente.', 'item' => $cartItem]);
     }
 
     public function remove($itemId)
     {
-        CartItem::find($itemId)->delete();
-        return redirect()->route('carts.index');
+        $cartItem = CartItem::find($itemId);
+        if ($cartItem) {
+            $cartItem->delete();
+            return response()->json(['message' => 'Producto eliminado del carrito exitosamente.']);
+        }
+
+        return response()->json(['message' => 'Producto no encontrado.'], 404);
     }
 
     public function updateQuantities(Request $request)
     {
         $quantities = $request->input('quantities', []);
-
         $total = 0;
 
         foreach ($quantities as $itemId => $quantity) {
@@ -57,13 +57,10 @@ class CartController extends Controller
                 $cartItem->quantity = (int) $quantity;
                 $cartItem->save();
 
-                // Calculate the total price
                 $total += $cartItem->product->price * $cartItem->quantity;
             }
         }
 
-        // Pass the total to the view
-        return redirect()->route('carts.index')->with('success', 'Quantidades actualizadas correctamente.')
-            ->with('total', $total);
+        return response()->json(['message' => 'Quantidades actualizadas correctamente.', 'total' => $total]);
     }
 }

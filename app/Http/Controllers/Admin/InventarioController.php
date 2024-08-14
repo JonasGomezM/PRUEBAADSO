@@ -10,29 +10,32 @@ use App\Models\OfferProduct;
 class InventarioController extends Controller
 {
     public function index(Request $request)
-{
-    $query = $request->input('query');
+    {
+        $query = $request->input('query');
 
-    $products = Product::when($query, function ($queryBuilder, $query) {
-        return $queryBuilder->where('name', 'like', "%{$query}%");
-    })->get();
+        $products = Product::when($query, function ($queryBuilder, $query) {
+            return $queryBuilder->where('name', 'like', "%{$query}%");
+        })->get();
 
-    $offerProducts = Product::where('is_on_offer', true)->get();
+        $offerProducts = Product::where('is_on_offer', true)->get();
 
-    // Contar la cantidad de productos
-    $productCount = $products->count();
+        // Contar la cantidad de productos
+        $productCount = $products->count();
 
-    // Contar la cantidad de productos en oferta
-    $offerProductCount = $offerProducts->count();
+        // Contar la cantidad de productos en oferta
+        $offerProductCount = $offerProducts->count();
 
-    return view('admin.inventario', compact('products', 'offerProducts', 'productCount', 'offerProductCount'));
-}
-
-
+        return response()->json([
+            'products' => $products,
+            'offerProducts' => $offerProducts,
+            'productCount' => $productCount,
+            'offerProductCount' => $offerProductCount,
+        ]);
+    }
 
     public function create()
     {
-        return view('admin.createProduct');
+        return response()->json(['message' => 'Crear producto']);
     }
 
     public function store(Request $request)
@@ -43,25 +46,23 @@ class InventarioController extends Controller
             'price' => 'required|numeric',
             'stock' => 'required|integer',
             'category' => 'required|string|in:perros,gatos,ropa',
-            'image_url' => 'nullable|url', // Validación para la URL de la imagen
+            'image_url' => 'nullable|url',
         ]);
 
-        Product::create($request->all());
-        return redirect()->route('admin.inventario')->with('success', 'Producto agregado correctamente.');
+        $product = Product::create($request->all());
+        return response()->json(['message' => 'Producto agregado correctamente', 'product' => $product]);
     }
-
 
     public function show(Product $product)
     {
-        return view('admin.show', compact('product'));
+        return response()->json($product);
     }
 
     public function edit($id)
     {
         $product = Product::findOrFail($id);
-        return view('admin.edit_product', compact('product'));
+        return response()->json($product);
     }
-
 
     public function update(Request $request, $id)
     {
@@ -77,15 +78,14 @@ class InventarioController extends Controller
         $product = Product::findOrFail($id);
         $product->update($request->all());
 
-        return redirect()->route('admin.inventario')->with('success', 'Producto actualizado correctamente');
+        return response()->json(['message' => 'Producto actualizado correctamente', 'product' => $product]);
     }
 
     public function destroy(Product $product)
     {
         $product->delete();
-        return redirect()->route('admin.inventario');
+        return response()->json(['message' => 'Producto eliminado correctamente']);
     }
-
 
     public function offer(Request $request, $id)
     {
@@ -102,7 +102,7 @@ class InventarioController extends Controller
                 $offerProduct->delete();
             }
 
-            return redirect()->route('admin.inventario')->with('success', 'Oferta desactivada.');
+            return response()->json(['message' => 'Oferta desactivada.', 'product' => $product]);
         } else {
             // Si el producto no está en oferta, agrégalo a la oferta
             OfferProduct::create([
@@ -116,7 +116,7 @@ class InventarioController extends Controller
             $product->is_on_offer = true;
             $product->save();
 
-            return redirect()->route('admin.inventario')->with('success', 'Producto agregado a la oferta.');
+            return response()->json(['message' => 'Producto agregado a la oferta.', 'product' => $product]);
         }
     }
 }

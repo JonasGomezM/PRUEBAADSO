@@ -9,19 +9,14 @@ class HomeController extends Controller
 {
     public function index(Request $request)
     {
-        // Obtener el término de búsqueda de la solicitud
         $search = $request->input('search');
-
-        // Si hay un término de búsqueda, filtrar los productos por nombre
         $products = Product::when($search, function ($query, $search) {
             return $query->where('name', 'like', "%{$search}%");
         })->get();
         
-        // Obtener productos en oferta
         $offerProducts = Product::where('is_on_offer', true)->get();
         
-        // Pasar ambos conjuntos de productos a la vista principal
-        return view('main', compact('products', 'offerProducts'));
+        return response()->json(['products' => $products, 'offerProducts' => $offerProducts]);
     }
 }
 
